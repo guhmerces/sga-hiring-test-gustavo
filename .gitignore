@@ -1,0 +1,7 @@
+node_modules/
+bin/
+yarn-error.log
+.env
+rabbitmq.env
+docker.env
+jwk.json

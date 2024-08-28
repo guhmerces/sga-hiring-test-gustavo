@@ -1,0 +1,26 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "coverageDirectory": "../tests/coverage",
+  "setupFilesAfterEnv": [
+    "./tests/setup/jestSetup.ts"
+  ],
+  "globalSetup": "<rootDir>/tests/setup/jestGlobalSetup.ts",
+  "testRegex": ".test.ts$",
+  "moduleNameMapper": {
+    "^src/(.*)$": [
+      "<rootDir>/src/$1"
+    ],
+    "^tests/(.*)$": [
+      "<rootDir>/tests/$1"
+    ]
+  },
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}
