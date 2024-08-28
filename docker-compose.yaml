@@ -1,0 +1,51 @@
+version: '3'
+services:
+  rabbitmq_sga_hiring_test:
+    image: rabbitmq:3-management
+    networks:
+      - ntw
+    container_name: rabbitmq_sga_hiring_test
+    hostname: rabbitmq
+    volumes:
+      - /var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - ./rabbitmq.env
+
+  postgres_sga_hiring_test:
+    image: postgres:16.1
+    container_name: postgres_sga_hiring_test
+    networks:
+      - ntw
+    volumes:
+      - /data/postgres:/data/postgres
+    env_file:
+      - docker.env
+
+  hiringtest_sga:
+    image: sgahiringtest
+    container_name: hiringtest_sga
+    env_file:
+      - docker.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_sga_hiring_test
+      - redis_sga_hiring_test
+      - rabbitmq_sga_hiring_test
+    networks:
+      - ntw
+
+  redis_sga_hiring_test:
+    image: "redis:alpine"
+    container_name: redis_sga_hiring_test
+    ports:
+      - "6379"
+    networks:
+      - ntw
+
+networks:
+  ntw:
+    driver: bridge
