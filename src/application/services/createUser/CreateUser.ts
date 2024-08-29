@@ -1,12 +1,10 @@
 import { Inject } from "@nestjs/common"
-import { KyselyUserRepo } from "src/infra/repos/KyselyUserRepo"
 import { GenericAppError } from "src/lib/exceptions/AppError"
 import { Either, left, Result, right } from "src/lib/logic/Result"
 import { USER_REPO } from "src/tokens"
 import { CreateUserErrors } from "./CreateUserErrors"
 import { UserPassword } from "src/domain/UserPassword"
 import { User } from "src/domain/User"
-import { v4 } from "uuid"
 import { UserRepoPort } from "src/domain/ports/UserRepoPort"
 
 type Response = Either<

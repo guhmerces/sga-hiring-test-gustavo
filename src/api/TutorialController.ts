@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Patch, Post, UnprocessableEntityException } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Param, Patch, Post, UnprocessableEntityException } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { routesV1 } from "src/app.routes";
-import { createTutorialSchema } from "src/application/dtos/schemas";
-import { CreateTutorial, CreateTutorialDto } from "src/application/services/createTutorial/CreateTutorial";
+import { createTutorialSchema, updateTutorialSchema } from "src/application/dtos/schemas";
+import { CreateTutorial, CreateTutorialDto, UpdateTutorialDto } from "src/application/services/createTutorial/CreateTutorial";
 import { CreateTutorialErros } from "src/application/services/createTutorial/CreateTutorialErros";
 import { DeleteTutorial } from "src/application/services/deleteTutorial/DeleteTutorial";
+import { DeleteTutorialErros } from "src/application/services/deleteTutorial/DeleteTutorialErros";
 import { UpdateTutorial } from "src/application/services/updateTutorial/UpdateTutorial";
 import openapi from "src/infra/http/openapi";
 
@@ -52,16 +53,49 @@ export class TutorialController {
   @ApiResponse({ status: 404, type: NotFoundException, description: "There isn't a existing tutorial with this id" })
   @ApiResponse({ status: 403, type: ForbiddenException, description: "The title must be unique" })
   @Patch(routesV1.tutorial.update)
-  public async update(@Body() body: CreateTutorialDto): Promise<any> {
+  public async update(@Body() body: UpdateTutorialDto): Promise<any> {
+    const validation = updateTutorialSchema.safeParse(body);
 
+    if (!validation.success) {
+      throw new UnprocessableEntityException(validation.error.message)
+    }
+
+    const result = await this.createTutorial.execute(body);
+
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case CreateTutorialErros.TitleAlreadyExists:
+          throw new ForbiddenException(error.errorValue().message)
+        case CreateTutorialErros.InvalidTutorial:
+          throw new UnprocessableEntityException(error.errorValue().message)
+        default:
+          throw new HttpException('Something went wrong', 500);
+      }
+    }
+
+    return result.value.getValue()
   }
 
   @ApiOperation(openapi.tutorial.delete.schema)
   @ApiResponse({ status: 200, type: String })
   @ApiResponse({ status: 404, type: NotFoundException })
   @Delete(routesV1.tutorial.delete)
-  public async delete(@Body() body: CreateTutorialDto): Promise<any> {
+  public async delete(
+    @Param('id') tutorial_id: string
+  ): Promise<any> {
+    const result = await this.deleteTutorial.execute(tutorial_id);
 
+    if (result.isLeft()) {
+      const error = result.value
+      switch (error.constructor) {
+        case DeleteTutorialErros.TutorialNotFound:
+          throw new NotFoundException(error.errorValue().message)
+        default:
+          throw new HttpException('Something went wrong', 500);
+      }
+    }
   }
 
   @ApiOperation(openapi.tutorial.all.schema)

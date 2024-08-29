@@ -86,7 +86,7 @@ export abstract class KyselyBaseRepo<
       .selectFrom(this.tableName as any)
       .selectAll()
       .where('id', '=', id)
-      .where('deleted_at', '=', null)
+      .where('deleted_at', 'is', null)
       .executeTakeFirst()
 
     if (!row) {

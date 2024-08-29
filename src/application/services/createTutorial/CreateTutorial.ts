@@ -11,6 +11,8 @@ export type CreateTutorialDto = {
   title: string;
 }
 
+export type UpdateTutorialDto = CreateTutorialDto;
+
 type Response = Either<
   CreateTutorialErros.TitleAlreadyExists |
   CreateTutorialErros.InvalidTutorial,
