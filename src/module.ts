@@ -1,6 +1,6 @@
 import { Module, Provider } from "@nestjs/common";
 import { UserController } from "./api/UserController";
-import { CreateUser } from "./application/services/createUser/CreateUser";
+import { SignupUser } from "./application/services/signupUser/SignupUser";
 import { TUTORIAL_REPO, USER_REPO } from "./tokens";
 import { UserMapper } from "./domain/mappers/UserMapper";
 import { ClientProxyFactory, Transport } from "@nestjs/microservices";
@@ -40,7 +40,7 @@ const mappers: Provider[] = [
 ];
 
 const useCases: Provider[] = [
-  CreateUser,
+  SignupUser,
   CreateToken,
 
 

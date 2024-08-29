@@ -1,7 +1,7 @@
 import { Body, Controller, ForbiddenException, HttpException, Post, UnauthorizedException, UnprocessableEntityException } from "@nestjs/common";
 import { routesV1 } from "src/app.routes";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { CreateUserErrors } from "src/application/services/createUser/CreateUserErrors";
+import { SignupUserErrors } from "src/application/services/signupUser/SignupUserErrors";
 import { loginRequestSchema } from "src/application/dtos/schemas";
 import openapi from "src/infra/http/openapi";
 import { CreateToken } from "src/application/services/createToken/CreateToken";

@@ -2,35 +2,35 @@ import { Inject } from "@nestjs/common"
 import { GenericAppError } from "src/lib/exceptions/AppError"
 import { Either, left, Result, right } from "src/lib/logic/Result"
 import { USER_REPO } from "src/tokens"
-import { CreateUserErrors } from "./CreateUserErrors"
+import { SignupUserErrors } from "./SignupUserErrors"
 import { UserPassword } from "src/domain/UserPassword"
 import { User } from "src/domain/User"
 import { UserRepoPort } from "src/domain/ports/UserRepoPort"
 
 type Response = Either<
   GenericAppError.UnexpectedError |
-  CreateUserErrors.AccountAlreadyExists,
+  SignupUserErrors.AccountAlreadyExists,
   Result<string>
 >
 
-type CreateUserRequestDto = {
+export type SignupUserRequestDto = {
   email: string;
   password: string;
 }
 
-export class CreateUser {
+export class SignupUser {
 
   constructor(
     @Inject(USER_REPO)
     protected userRepo: UserRepoPort,
   ) { }
 
-  public async execute(dto: CreateUserRequestDto): Promise<Response> {
+  public async execute(dto: SignupUserRequestDto): Promise<Response> {
     try {
       const exists = await this.userRepo.exists(dto.email)
       if (!!exists) {
         return left(
-          new CreateUserErrors.AccountAlreadyExists(dto.email)
+          new SignupUserErrors.AccountAlreadyExists(dto.email)
         )
       }
     } catch (error) {
