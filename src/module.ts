@@ -4,15 +4,18 @@ import { CreateUser } from "./application/services/createUser/CreateUser";
 import { USER_REPO } from "./tokens";
 import { UserMapper } from "./domain/mappers/UserMapper";
 import { ClientProxyFactory, Transport } from "@nestjs/microservices";
-import { UserRepo } from "./infra/repos/UserRepo";
+import { KyselyUserRepo } from "./infra/repos/KyselyUserRepo";
 import { ContextInterceptor } from "./lib/application/ContextInterceptor";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { db } from "./boot/db";
 import { RequestContextModule } from "nestjs-request-context";
 import { EventEmitterModule } from "@nestjs/event-emitter";
+import { CreateToken } from "./application/services/createToken/CreateToken";
+import { LoginController } from "./api/LoginController";
 
 const httpControllers = [
   UserController,
+  LoginController,
 ];
 
 const messageControllers = [];
@@ -28,10 +31,11 @@ const mappers: Provider[] = [
 
 const useCases: Provider[] = [
   CreateUser,
+  CreateToken
 ];
 
 const repos: Provider[] = [
-  { provide: USER_REPO, useClass: UserRepo },
+  { provide: USER_REPO, useClass: KyselyUserRepo },
 ]
 
 const queries: Provider[] = []

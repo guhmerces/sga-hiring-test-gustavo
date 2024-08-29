@@ -1,9 +1,9 @@
 import { generateSchema } from "@anatine/zod-openapi";
 import { SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
-import { createUserRequestSchema } from "src/application/dtos/schemas";
+import { createUserRequestSchema, loginRequestSchema } from "src/application/dtos/schemas";
 
 export default {
-  users: {
+  user: {
     signup: {
       schema: {
         summary: 'Create a user',
@@ -13,6 +13,20 @@ export default {
           content: {
             'application/json': {
               schema: generateSchema(createUserRequestSchema) as SchemaObject
+            }
+          }
+        }
+      }
+    },
+    login: {
+      schema: {
+        summary: 'Retrieve a JWT token',
+        tags: ['user'],
+        description: 'Retrieve a JWT token',
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: generateSchema(loginRequestSchema) as SchemaObject
             }
           }
         }
