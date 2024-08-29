@@ -1,5 +1,5 @@
 import { Inject } from "@nestjs/common"
-import { UserRepo } from "src/infra/repos/UserRepo"
+import { KyselyUserRepo } from "src/infra/repos/KyselyUserRepo"
 import { GenericAppError } from "src/lib/exceptions/AppError"
 import { Either, left, Result, right } from "src/lib/logic/Result"
 import { USER_REPO } from "src/tokens"
@@ -7,7 +7,7 @@ import { CreateUserErrors } from "./CreateUserErrors"
 import { UserPassword } from "src/domain/UserPassword"
 import { User } from "src/domain/User"
 import { v4 } from "uuid"
-import { UserPort } from "src/domain/ports/UserRepoPort"
+import { UserRepoPort } from "src/domain/ports/UserRepoPort"
 
 type Response = Either<
   GenericAppError.UnexpectedError |
@@ -24,13 +24,13 @@ export class CreateUser {
 
   constructor(
     @Inject(USER_REPO)
-    protected userRepo: UserPort,
+    protected userRepo: UserRepoPort,
   ) { }
 
   public async execute(dto: CreateUserRequestDto): Promise<Response> {
     try {
       const exists = await this.userRepo.exists(dto.email)
-      if (!exists) {
+      if (!!exists) {
         return left(
           new CreateUserErrors.AccountAlreadyExists(dto.email)
         )
@@ -44,12 +44,10 @@ export class CreateUser {
       hashed: true,
     })
 
-    const userId = v4();
-
     const user = User.create({
       email: dto.email,
       passwordHash: hashedPassword.getValue(),
-    }, userId);
+    });
 
     try {
       await this.userRepo.transaction( async() => {
@@ -57,7 +55,7 @@ export class CreateUser {
       })
 
       return right(
-        Result.ok(userId)
+        Result.ok(user.id)
       );
     } catch (error) {
       return left(new GenericAppError.UnexpectedError(error))

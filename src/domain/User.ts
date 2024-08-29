@@ -8,24 +8,27 @@ interface UserProps {
   passwordHash: UserPassword;
 }
 
-export class User extends AggregateRoot<UserProps>{
-  public static create(props: UserProps, id?: string): User {
+export class User extends AggregateRoot<UserProps> {
+  public static create(props: UserProps): User {
 
     // props validation - avoid invalid state
 
     const validation = z.object({
-      email: z.string().email({ message: 'invalid email'}),
-      passwordHash: z.string()
+      email: z.string().email({ message: 'invalid email' }),
     }).safeParse(props)
 
-    if(!validation.success) {
+    if (!validation.success) {
       throw new ArgumentInvalidException(validation.error.message)
+    }
+
+    if (!(props.passwordHash instanceof UserPassword)) {
+      throw new ArgumentInvalidException('The atribute passwordHash should be a instance of UserPassword')
     }
 
     return new User({
       props: {
         email: validation.data.email,
-        passwordHash: UserPassword.create({ value: validation.data.passwordHash}).getValue()
+        passwordHash: props.passwordHash
       }
     })
   }

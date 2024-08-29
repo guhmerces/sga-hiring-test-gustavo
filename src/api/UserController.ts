@@ -1,29 +1,28 @@
-import { Body, Controller, ForbiddenException, Get, HttpException, Post, UnprocessableEntityException } from "@nestjs/common";
+import { Body, Controller, ForbiddenException, HttpException, Post, UnprocessableEntityException } from "@nestjs/common";
 import { routesV1 } from "src/app.routes";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { z } from "zod";
 import { CreateUser } from "src/application/services/createUser/CreateUser";
 import { CreateUserErrors } from "src/application/services/createUser/CreateUserErrors";
 import { createUserRequestSchema } from "src/application/dtos/schemas";
 import openapi from "src/infra/http/openapi";
 
-interface CreateUserRequestDtoProps {
+interface CreateUserRequestDto {
   email: string;
   password: string;
   passwordConfirmation: string;
 }
 
-@Controller(routesV1.version)
+@Controller()
 export class UserController {
   constructor(
     protected createUser: CreateUser,
   ) { }
-  @ApiOperation(openapi.users.signup.schema)
+  @ApiOperation(openapi.user.signup.schema)
   @ApiResponse({ status: 200, type: String })
   @ApiResponse({ status: 422, type: UnprocessableEntityException })
   @ApiResponse({ status: 403, type: ForbiddenException })
-  @Post(routesV1.login.signup)
-  public async create(@Body() body: CreateUserRequestDtoProps): Promise<any> {
+  @Post(routesV1.user.signup)
+  public async create(@Body() body: CreateUserRequestDto): Promise<any> {
 
     const validation = createUserRequestSchema.safeParse(body);
 
