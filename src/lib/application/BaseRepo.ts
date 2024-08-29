@@ -1,20 +1,21 @@
 import { Mapper } from "../domain/Mapper";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AggregateRoot } from "../domain/AggregateRoot";
-import { LoggerPort } from "../ports/ILogger";
+import { LoggerPort } from "../ports/LoggerPort";
 import { Kysely, RawBuilder, Transaction, UpdateObject, sql } from "kysely";
 import { Database } from "src/boot/db";
 import { AppRequestContextService } from "./AppRequestContext";
+import { BaseRepoPort } from "../ports/BaseRepoPort";
 
 export interface ObjectLiteral {
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 export abstract class BaseRepo<
   Aggregate extends AggregateRoot<any>,
   PersistenceModel extends ObjectLiteral,
-> {
-  protected abstract tableName: (keyof Database);
+> implements BaseRepoPort<Aggregate> {
+  protected abstract tableName: string;
 
   constructor(
     private readonly _pool: Kysely<Database>,
@@ -62,7 +63,7 @@ export abstract class BaseRepo<
     });
   }
 
-  protected async insert(entity: Aggregate | Aggregate[]) {
+  async insert(entity: Aggregate | Aggregate[]) {
     const entities = Array.isArray(entity) ? entity : [entity];
 
     const records = entities.map(entity => {
@@ -80,36 +81,39 @@ export abstract class BaseRepo<
     });
   }
 
-  protected async destroy(entity: Aggregate, sqlExpression: RawBuilder<any> = sql`1=1`) {
-    await this.pool
-      .updateTable(this.tableName)
-      .set({
-        deleted_at: new Date(),
-      } as UpdateObject<Database, keyof Database, keyof Database>)
-      .where('id', '=', entity.getProps().id)
-      .where(sqlExpression)
-      .execute()
-  }
-
-  protected async findOne<T>(id: string, sqlExpression: RawBuilder<any>): Promise<T> {
-    const pool = this.pool;
-
-    //@ts-ignore
-    return pool
-      .selectFrom(this.tableName)
+  async findOne(id: string): Promise<Aggregate | undefined> {
+    const row = await this.pool
+      .selectFrom(this.tableName as any)
       .selectAll()
       .where('id', '=', id)
-      .where(sqlExpression)
+      .where('deleted_at', '=', null)
       .executeTakeFirst()
+
+    if (!row) {
+      return undefined
+    }
+
+    return this.mapper.toDomain(row)
   }
 
-  protected async findAll(sqlExpression: RawBuilder<any>) {
-    const pool = this.pool;
-
-    return pool
-      .selectFrom(this.tableName)
+  async findAll(): Promise<Aggregate[]> {
+    const rows = await this
+      .pool
+      .selectFrom(this.tableName as any)
       .selectAll()
-      .where(sqlExpression)
+      .where('deleted_at', '=', null)
+      .execute()
+
+    return rows.map(this.mapper.toDomain)
+  }
+
+  async delete(entity: Aggregate): Promise<void> {
+    await this.pool
+      .updateTable(this.tableName as any)
+      .set({
+        deleted_at: new Date()
+      })
+      .where('id', '=', entity.id)
       .execute()
   }
   /**
