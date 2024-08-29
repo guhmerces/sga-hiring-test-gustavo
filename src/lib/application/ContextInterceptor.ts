@@ -1,6 +1,6 @@
 import { ExecutionContext, NestInterceptor } from "@nestjs/common";
-import { AppRequestContextService } from "../AppRequestContext";
 import { nanoid } from 'nanoid';
+import { AppRequestContextService } from "./AppRequestContext";
 
 export class ContextInterceptor implements NestInterceptor{
   intercept(context: ExecutionContext, next: any) {

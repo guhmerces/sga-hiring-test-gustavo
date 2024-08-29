@@ -108,7 +108,7 @@ async function bootstrap() {
 
 
   const config = new DocumentBuilder()
-    .setTitle('Hiring Test Documentation')
+    .setTitle('SGA Hiring Test Documentation')
     .setDescription('Lorem ipsum')
     .setVersion('1.0')
     .build();
