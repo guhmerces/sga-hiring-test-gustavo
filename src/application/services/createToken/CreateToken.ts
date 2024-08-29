@@ -26,7 +26,6 @@ export class CreateToken {
     protected userRepo: UserRepoPort,
   ) { }
 
-  //@ts-ignore
   public async execute(dto: LoginDto): Promise<Response> {
     const { email, password } = dto;
 

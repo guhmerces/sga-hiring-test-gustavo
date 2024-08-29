@@ -7,7 +7,7 @@ export const routesV1 = {
     login: `/${userRoot}/login`,
     signup: `/${userRoot}/signup`,
   },
-    tutorial: {
+  tutorial: {
     create: `/${tutorialRoot}`,
     update: `/${tutorialRoot}/:id`,
     delete: `/${tutorialRoot}/:id`,
