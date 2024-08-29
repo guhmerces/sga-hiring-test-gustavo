@@ -1,3 +1,4 @@
+const tutorialRoot = "tutorial";
 const userRoot = "user";
 
 export const routesV1 = {
@@ -5,5 +6,11 @@ export const routesV1 = {
   login: {
     login: `/${userRoot}/login`,
     signup: `/${userRoot}/signup`,
+  },
+  tutorial: {
+    create: `/${tutorialRoot}`,
+    update: `/${tutorialRoot}/:id`,
+    delete: `/${tutorialRoot}/:id`,
+    all: `/${tutorialRoot}`,
   },
 };
