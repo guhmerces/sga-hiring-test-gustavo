@@ -2,10 +2,10 @@ import { Mapper } from "../domain/Mapper";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AggregateRoot } from "../domain/AggregateRoot";
 import { LoggerPort } from "../ports/LoggerPort";
-import { Kysely, RawBuilder, Transaction, UpdateObject, sql } from "kysely";
+import { Kysely, Transaction, sql } from "kysely";
 import { Database } from "src/boot/db";
-import { AppRequestContextService } from "./AppRequestContext";
 import { BaseRepoPort } from "../ports/BaseRepoPort";
+import { AppRequestContextService } from "../application/AppRequestContext";
 
 export interface ObjectLiteral {
   [key: string]: any;
