@@ -23,5 +23,5 @@ export const loginRequestSchema = z.object({
 });
 
 export const createTutorialSchema = z.object({
-  title: z.string().email().max(256),
+  title: z.string().max(255),
 });

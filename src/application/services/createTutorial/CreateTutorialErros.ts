@@ -9,4 +9,11 @@ export namespace CreateTutorialErros {
       } as UseCaseError)
     }
   }
+  export class InvalidTutorial extends Result<UseCaseError> {    
+    constructor (errorMessage: string) {
+      super(false, {
+        message: `There was an error during Tutorial creation : ${errorMessage}`
+      } as UseCaseError)
+    }
+  }
 }
