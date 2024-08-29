@@ -3,14 +3,14 @@ const userRoot = "user";
 
 export const routesV1 = {
   version: "v1",
-  login: {
+  user: {
     login: `/${userRoot}/login`,
     signup: `/${userRoot}/signup`,
   },
-  tutorial: {
+    tutorial: {
     create: `/${tutorialRoot}`,
     update: `/${tutorialRoot}/:id`,
     delete: `/${tutorialRoot}/:id`,
     all: `/${tutorialRoot}`,
-  },
+  }
 };

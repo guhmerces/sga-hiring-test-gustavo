@@ -61,7 +61,7 @@ export async function bootstrap(module: NestModule, port: number) {
 
   const config = new DocumentBuilder()
     .setTitle('SGA Hiring Test Documentation')
-    .setDescription('Lorem ipsum')
+    .setDescription('Hiring test')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
