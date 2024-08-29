@@ -1,18 +1,19 @@
-import { Database, db, jsonArrayFrom, jsonObjectFrom, RawUser } from "src/boot/db";
+import { Database, db, RawUser } from "src/boot/db";
 import { Kysely } from "kysely";
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { BaseRepo } from "src/lib/application/BaseRepo";
+import { KyselyBaseRepo } from "src/lib/application/KyselyBaseRepo";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UserMapper } from "src/domain/mappers/UserMapper";
 import { User } from "src/domain/User";
+import { UserRepoPort } from "src/domain/ports/UserRepoPort";
 
 @Injectable()
-export class UserRepo extends BaseRepo<
+export class KyselyUserRepo extends KyselyBaseRepo<
   User,
   RawUser
-> {
+> implements UserRepoPort {
 
-  protected tableName = "users" as keyof Database;
+  protected tableName = "users";
 
   constructor(
     @Inject('DatabasePool')
@@ -20,7 +21,7 @@ export class UserRepo extends BaseRepo<
     mapper: UserMapper,
     eventEmitter: EventEmitter2,
   ) {
-    super(db, mapper, eventEmitter, new Logger(UserRepo.name));
+    super(db, mapper, eventEmitter, new Logger(KyselyUserRepo.name));
   }
 
   async exists(email: string) {
@@ -31,7 +32,7 @@ export class UserRepo extends BaseRepo<
       .executeTakeFirst()
 
     if(!rawUser) {
-      return undefined;
+      return false;
     }
 
     return this.mapper.toDomain(rawUser)

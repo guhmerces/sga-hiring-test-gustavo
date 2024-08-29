@@ -11,7 +11,7 @@ export interface ObjectLiteral {
   [key: string]: any;
 }
 
-export abstract class BaseRepo<
+export abstract class KyselyBaseRepo<
   Aggregate extends AggregateRoot<any>,
   PersistenceModel extends ObjectLiteral,
 > implements BaseRepoPort<Aggregate> {
