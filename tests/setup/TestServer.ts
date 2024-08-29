@@ -1,6 +1,6 @@
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Test, TestingModuleBuilder, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'src/index';
+import { AppModule } from 'src/module';
 
 export class TestServer {
   constructor(

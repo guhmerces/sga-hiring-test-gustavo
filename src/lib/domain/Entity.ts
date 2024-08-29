@@ -3,8 +3,8 @@ import { v4 } from 'uuid';
 
 export interface BaseEntityProps {
   id: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
   deletedAt?: Date;
 }
 
@@ -12,7 +12,6 @@ export interface CreateEntityProps<EntityProps> {
   props: EntityProps;
   createdAt?: Date;
   updatedAt?: Date;
-  deletedAt?: Date;
 }
 
 const isEntity = (v: any): v is Entity<any> => {
@@ -23,13 +22,12 @@ export abstract class Entity<EntityProps> {
   protected readonly _id: string;
   public readonly props: EntityProps;
 
-  constructor({props, createdAt, updatedAt, deletedAt}: CreateEntityProps<EntityProps> , id?: string) {
+  constructor({props, createdAt, updatedAt}: CreateEntityProps<EntityProps> , id?: string) {
     this._id = id ? id : v4();
     this.props = props;
     const now = new Date();
     this._createdAt = createdAt || now;
     this._updatedAt = updatedAt || now;
-    this._deletedAt = deletedAt;
     this.props = props;
   }
 

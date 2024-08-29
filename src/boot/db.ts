@@ -10,15 +10,26 @@ import {
 import {Pool} from 'pg';
 import { poolData } from "src/config/database.config";
 
+export type RawUser = {
+  id: string;
+  email: string;
+  password_hash: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at?: Date;
+}
+
+export type RawTutorial = {
+  id: string;
+  title: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at?: Date;
+}
+
 export interface Database {
-  users: {
-    id: string;
-    email: string;
-    password_hash: string;
-    created_at: Date;
-    updated_at: Date;
-    deleted_at?: Date;
-  },
+  users: RawUser,
+  tutorials: RawTutorial,
 }
 
 const dialect = new PostgresDialect({

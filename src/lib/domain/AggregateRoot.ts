@@ -2,7 +2,7 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { DomainEvent } from "../events/DomainEvent";
 import { Entity } from "./Entity";
-import { LoggerPort } from "../ports/ILogger";
+import { LoggerPort } from "../ports/LoggerPort";
 import { AppRequestContextService } from "../application/AppRequestContext";
 
 export abstract class AggregateRoot<T> extends Entity<T> {
