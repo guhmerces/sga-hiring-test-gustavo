@@ -53,14 +53,17 @@ export class TutorialController {
   @ApiResponse({ status: 404, type: NotFoundException, description: "There isn't a existing tutorial with this id" })
   @ApiResponse({ status: 403, type: ForbiddenException, description: "The title must be unique" })
   @Patch(routesV1.tutorial.update)
-  public async update(@Body() body: UpdateTutorialDto): Promise<any> {
+  public async update(
+    @Body() body: UpdateTutorialDto,
+    @Param('id') tutorial_id: string
+  ): Promise<any> {
     const validation = updateTutorialSchema.safeParse(body);
 
     if (!validation.success) {
       throw new UnprocessableEntityException(validation.error.message)
     }
 
-    const result = await this.createTutorial.execute(body);
+    const result = await this.updateTutorial.execute(body, tutorial_id);
 
     if (result.isLeft()) {
       const error = result.value;
@@ -68,14 +71,14 @@ export class TutorialController {
       switch (error.constructor) {
         case CreateTutorialErros.TitleAlreadyExists:
           throw new ForbiddenException(error.errorValue().message)
+        case DeleteTutorialErros.TutorialNotFound:
+          throw new NotFoundException(error.errorValue().message)
         case CreateTutorialErros.InvalidTutorial:
           throw new UnprocessableEntityException(error.errorValue().message)
         default:
           throw new HttpException('Something went wrong', 500);
       }
     }
-
-    return result.value.getValue()
   }
 
   @ApiOperation(openapi.tutorial.delete.schema)

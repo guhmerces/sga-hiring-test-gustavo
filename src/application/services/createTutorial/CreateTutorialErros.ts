@@ -5,7 +5,7 @@ export namespace CreateTutorialErros {
   export class TitleAlreadyExists extends Result<UseCaseError> {    
     constructor (title: string) {
       super(false, {
-        message: `A tutorial with title ${title} already exists. Please, try again with another title.`
+        message: `A tutorial with title "${title}" already exists. Please, try again with another title.`
       } as UseCaseError)
     }
   }

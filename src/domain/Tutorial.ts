@@ -12,7 +12,7 @@ export class Tutorial extends AggregateRoot<TutorialProps> {
     // props validation - avoid invalid state
 
     const validation = z.object({
-      title: z.string().max(255),
+      title: z.string().max(25),
     }).safeParse(props)
 
     if (!validation.success) {
@@ -24,5 +24,13 @@ export class Tutorial extends AggregateRoot<TutorialProps> {
         title: validation.data.title,
       }
     })
+  }
+
+  public update(props: TutorialProps) {
+    // make sure the new props met requirements to build a valid Tutorial
+    const newTutorial = Tutorial.create(props);
+
+    // update only allowed attributes
+    this.props.title = newTutorial.props.title
   }
 }
