@@ -1,7 +1,7 @@
 import { Module, Provider } from "@nestjs/common";
 import { UserController } from "./api/UserController";
 import { CreateUser } from "./application/services/createUser/CreateUser";
-import { USER_REPO } from "./tokens";
+import { TUTORIAL_REPO, USER_REPO } from "./tokens";
 import { UserMapper } from "./domain/mappers/UserMapper";
 import { ClientProxyFactory, Transport } from "@nestjs/microservices";
 import { KyselyUserRepo } from "./infra/repos/KyselyUserRepo";
@@ -12,10 +12,19 @@ import { RequestContextModule } from "nestjs-request-context";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { CreateToken } from "./application/services/createToken/CreateToken";
 import { LoginController } from "./api/LoginController";
+import { CreateTutorial } from "./application/services/createTutorial/CreateTutorial";
+import { UpdateTutorial } from "./application/services/updateTutorial/UpdateTutorial";
+import { DeleteTutorial } from "./application/services/deleteTutorial/DeleteTutorial";
+import { TutorialController } from "./api/TutorialController";
+import { KyselyTutorialRepo } from "./infra/repos/KyselyTutorialRepo";
+import { TutorialMapper } from "./domain/mappers/TutorialMapper";
 
 const httpControllers = [
   UserController,
   LoginController,
+
+  //Tutorial
+  TutorialController
 ];
 
 const messageControllers = [];
@@ -26,16 +35,24 @@ const commandHandlers: Provider[] = [];
 const eventHandlers: Provider[] = []
 
 const mappers: Provider[] = [
-  UserMapper
+  UserMapper,
+  TutorialMapper
 ];
 
 const useCases: Provider[] = [
   CreateUser,
-  CreateToken
+  CreateToken,
+
+
+  // Tutorial
+  CreateTutorial,
+  UpdateTutorial,
+  DeleteTutorial,
 ];
 
 const repos: Provider[] = [
   { provide: USER_REPO, useClass: KyselyUserRepo },
+  { provide: TUTORIAL_REPO, useClass: KyselyTutorialRepo },
 ]
 
 const queries: Provider[] = []
@@ -76,9 +93,9 @@ const microservices = [
     ...microservices,
     ...eventHandlers,
   ],
-  imports: [ 
+  imports: [
     RequestContextModule,
     EventEmitterModule.forRoot(),
-   ]
+  ]
 })
-export class AppModule{ }
+export class AppModule { }

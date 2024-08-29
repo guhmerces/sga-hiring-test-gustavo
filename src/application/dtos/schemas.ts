@@ -21,3 +21,7 @@ export const loginRequestSchema = z.object({
   email: z.string().email({ message: 'invalid email' }),
   password: z.string(),
 });
+
+export const createTutorialSchema = z.object({
+  title: z.string().email().max(256),
+});
