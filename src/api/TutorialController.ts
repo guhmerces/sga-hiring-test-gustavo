@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Param, Patch, Post, UnprocessableEntityException } from "@nestjs/common";
+import { CacheInterceptor, CacheKey } from "@nestjs/cache-manager";
+import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Param, Patch, Post, Query, UnprocessableEntityException, UseInterceptors } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { routesV1 } from "src/app.routes";
 import { createTutorialSchema, updateTutorialSchema } from "src/application/dtos/schemas";
@@ -8,6 +9,7 @@ import { DeleteTutorial } from "src/application/services/deleteTutorial/DeleteTu
 import { DeleteTutorialErros } from "src/application/services/deleteTutorial/DeleteTutorialErros";
 import { UpdateTutorial, UpdateTutorialDto } from "src/application/services/updateTutorial/UpdateTutorial";
 import openapi from "src/infra/http/openapi";
+import { FindTutorialsDto, PaginatedQueryDto } from "src/shared-types";
 
 @Controller()
 export class TutorialController {
@@ -101,10 +103,14 @@ export class TutorialController {
     }
   }
 
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('app_tutorials')
   @ApiOperation(openapi.tutorial.all.schema)
   @ApiResponse({ status: 200, type: String, description: 'Return all tutorials, paginated' })
   @Get(routesV1.tutorial.all)
   public async all(
+    @Body() request: FindTutorialsDto,
+    @Query() queryParams: PaginatedQueryDto,
   ): Promise<any> {
 
   }

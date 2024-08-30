@@ -1,4 +1,4 @@
-import { Module, Provider } from "@nestjs/common";
+import { Module, Provider, CacheModule } from "@nestjs/common";
 import { UserController } from "./api/UserController";
 import { SignupUser } from "./application/services/signupUser/SignupUser";
 import { TUTORIAL_REPO, USER_REPO } from "./tokens";
@@ -96,6 +96,10 @@ const microservices = [
   imports: [
     RequestContextModule,
     EventEmitterModule.forRoot(),
+    CacheModule.register({
+      ttl: 60,
+      max: 10000,
+    }),
   ]
 })
 export class AppModule { }

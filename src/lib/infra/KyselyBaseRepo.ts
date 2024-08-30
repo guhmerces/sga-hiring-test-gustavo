@@ -4,7 +4,7 @@ import { AggregateRoot } from "../domain/AggregateRoot";
 import { LoggerPort } from "../ports/LoggerPort";
 import { Kysely, Transaction, sql } from "kysely";
 import { Database } from "src/boot/db";
-import { BaseRepoPort } from "../ports/BaseRepoPort";
+import { BaseRepoPort, Paginated, PaginatedQueryParams } from "../ports/BaseRepoPort";
 import { AppRequestContextService } from "../application/AppRequestContext";
 
 export interface ObjectLiteral {
@@ -105,6 +105,30 @@ export abstract class KyselyBaseRepo<
       .execute()
 
     return rows.map(this.mapper.toDomain)
+  }
+
+  async findAllPaginated(
+    params: PaginatedQueryParams,
+  ): Promise<Paginated<Aggregate>> {
+
+    const rows = await this
+      .pool
+      .selectFrom(this.tableName as any)
+      .selectAll()
+      .where('deleted_at', '=', null)
+      .limit(params.limit)
+      .offset(params.offset)
+      .orderBy(params.orderBy.field, params.orderBy.param)
+      .execute()
+
+    const entities = rows.map(this.mapper.toDomain)
+
+    return new Paginated({
+      data: entities,
+      count: entities.length,
+      limit: params.limit,
+      page: params.page,
+    });
   }
 
   async delete(entity: Aggregate): Promise<void> {
