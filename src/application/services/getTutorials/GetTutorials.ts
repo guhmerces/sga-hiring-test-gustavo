@@ -27,8 +27,6 @@ export class GetTutorials {
 
   //@ts-ignore
   public async execute(dto: FindTutorialsDto & PaginatedDto): Promise<Response> {
-    console.log('dto', dto)
-
     try {
 
       const sqlQueryFilters: SQLQueryFilters[] = []

@@ -1,5 +1,6 @@
 import { Module, Provider } from "@nestjs/common";
 import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 import { UserController } from "./api/UserController";
 import { SignupUser } from "./application/services/signupUser/SignupUser";
 import { TUTORIAL_REPO, USER_REPO } from "./tokens";
@@ -100,8 +101,10 @@ const microservices = [
     RequestContextModule,
     EventEmitterModule.forRoot(),
     CacheModule.register({
-      ttl: 60,
-      max: 10000,
+      isGlobal: true,
+      store: redisStore,
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
     }),
   ]
 })

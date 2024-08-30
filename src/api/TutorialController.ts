@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Param, Patch, Post, Query, Req, UnprocessableEntityException, UseInterceptors } from "@nestjs/common";
+import { CACHE_MANAGER, CacheInterceptor } from "@nestjs/cache-manager";
+import { Body, Controller, Delete, ForbiddenException, Get, HttpException, Inject, NotFoundException, Param, Patch, Post, Query, Req, UnprocessableEntityException, UseInterceptors } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Cache } from "cache-manager";
 import moment from "moment";
 import { routesV1 } from "src/app.routes";
 import { createTutorialSchema, getTutorialsQuerySchema, paginatedQuerySchema, updateTutorialSchema } from "src/application/dtos/schemas";
@@ -7,7 +9,7 @@ import { CreateTutorial, CreateTutorialDto } from "src/application/services/crea
 import { CreateTutorialErrors } from "src/application/services/createTutorial/CreateTutorialErrors";
 import { DeleteTutorial } from "src/application/services/deleteTutorial/DeleteTutorial";
 import { DeleteTutorialErrors } from "src/application/services/deleteTutorial/DeleteTutorialErrors";
-import { FindTutorialsDto, GetTutorials } from "src/application/services/getTutorials/GetTutorials";
+import { GetTutorials } from "src/application/services/getTutorials/GetTutorials";
 import { UpdateTutorial, UpdateTutorialDto } from "src/application/services/updateTutorial/UpdateTutorial";
 import { TutorialMapper } from "src/domain/mappers/TutorialMapper";
 import { Tutorial } from "src/domain/Tutorial";
@@ -32,6 +34,8 @@ export class TutorialController {
     protected updateTutorial: UpdateTutorial,
     protected deleteTutorial: DeleteTutorial,
     protected getTutorials: GetTutorials,
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache
   ) { }
 
   @ApiOperation(openapi.tutorial.create.schema)
@@ -60,8 +64,6 @@ export class TutorialController {
           throw new HttpException('Something went wrong', 500);
       }
     }
-
-    return result.value.getValue()
   }
 
   @ApiOperation(openapi.tutorial.update.schema)
@@ -118,15 +120,22 @@ export class TutorialController {
     }
   }
 
-  @Get(routesV1.tutorial.all)
   @ApiOperation(openapi.tutorial.all.schema)
   @ApiResponse({ status: 422, type: UnprocessableEntityException, description: 'Invalid params' })
   @ApiResponse({ status: 200, type: String, description: 'Return all tutorials, paginated' })
+  @Get(routesV1.tutorial.all)
   public async all(
     @Query() params: FindTutorialsQueryDto & PaginatedQueryDto,
   ): Promise<any> {
     try {
       const validatedParams = getTutorialsQuerySchema.parse(params)
+
+      const cacheKey = JSON.stringify(validatedParams);
+      const cached = await this.cacheManager.get(cacheKey);
+
+      if (cached) {
+        return JSON.parse(cached as string)
+      }
 
       const result = await this.getTutorials.execute({
         ...validatedParams,
@@ -138,10 +147,17 @@ export class TutorialController {
 
       const paginated = result.value.getValue() as Paginated<Tutorial>;
 
-      return {
+      const resultToBeCached = {
         ...paginated,
         data: paginated.data.map((new TutorialMapper).toAPI)
       }
+
+      await this.cacheManager.set(
+        cacheKey,
+        JSON.stringify(resultToBeCached)
+      )
+
+      return resultToBeCached
 
     } catch (error: any) {
       console.log(error)

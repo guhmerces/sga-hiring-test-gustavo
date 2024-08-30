@@ -33,6 +33,7 @@
     "amqplib": "^0.10.4",
     "bcrypt": "^5.1.1",
     "cache-manager": "^5.7.6",
+    "cache-manager-redis-store": "^2.0.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.21.0",
     "ioredis": "^5.4.1",
@@ -51,6 +52,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/cache-manager-redis-store": "^2.0.4",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.5",
     "jest": "^29.6.2",

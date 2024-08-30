@@ -115,7 +115,6 @@ export abstract class KyselyBaseRepo<
       .selectFrom(this.tableName as any)
       .selectAll()
       .where('deleted_at', 'is', null)
-    console.log('params', params)
 
     // Add filters to sql query
     sqlStatement = params
