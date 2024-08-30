@@ -9,6 +9,7 @@
     "build": "nest build",
     "setup": "yarn run migrate",
     "start": "node ./bin/src/index.js",
+    "seed": "yarn ts-node dev/scripts/seed.ts",
     "migrate": "MIGRATE=UP yarn ts-node dev/scripts/migrator.ts",
     "migrate-down": "MIGRATE=DOWN yarn ts-node dev/scripts/migrator.ts",
     "test:e2e": "NODE_ENV=development jest -i --config jest-e2e.json --forceExit --detectOpenHandles",
