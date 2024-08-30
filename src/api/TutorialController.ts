@@ -2,11 +2,11 @@ import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFo
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { routesV1 } from "src/app.routes";
 import { createTutorialSchema, updateTutorialSchema } from "src/application/dtos/schemas";
-import { CreateTutorial, CreateTutorialDto, UpdateTutorialDto } from "src/application/services/createTutorial/CreateTutorial";
+import { CreateTutorial, CreateTutorialDto } from "src/application/services/createTutorial/CreateTutorial";
 import { CreateTutorialErros } from "src/application/services/createTutorial/CreateTutorialErros";
 import { DeleteTutorial } from "src/application/services/deleteTutorial/DeleteTutorial";
 import { DeleteTutorialErros } from "src/application/services/deleteTutorial/DeleteTutorialErros";
-import { UpdateTutorial } from "src/application/services/updateTutorial/UpdateTutorial";
+import { UpdateTutorial, UpdateTutorialDto } from "src/application/services/updateTutorial/UpdateTutorial";
 import openapi from "src/infra/http/openapi";
 
 @Controller()

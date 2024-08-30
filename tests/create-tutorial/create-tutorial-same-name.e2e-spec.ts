@@ -4,9 +4,9 @@ import { Database } from "src/boot/db";
 import { getConnectionPool } from "tests/setup/jestSetup";
 import { TestContext } from "tests/test-utils/TestContext";
 import { ApiClient } from "tests/test-utils/ApiClient";
-import { CreateTutorialTestContext, givenTutorialData, iSendRequestToCreateATutorial } from "tests/steps";
+import { CreateTutorialTestContext, givenTutorialData, iReceiveAnErrorWithStatusCode, iSendRequestToCreateATutorial } from "tests/steps";
 
-const feature = loadFeature('tests/create-tutorial/create-tutorial.feature');
+const feature = loadFeature('tests/create-tutorial/create-tutorial-same-name.feature');
 
 defineFeature(feature, (test) => {
   let pool: Kysely<Database>;
@@ -24,8 +24,9 @@ defineFeature(feature, (test) => {
     await pool.executeQuery(truncateStatement.compile(pool));
   });
 
-  test('can create a tutorial', ({ given, when, then, and }) => {
+  test("I can not create a Tutorial with title equals to an existing Tutorial's title", ({ given, when, then, and }) => {
     const createTutorialCtx = new TestContext<CreateTutorialTestContext>();
+    const secondTutorialCreationCtx = new TestContext<CreateTutorialTestContext>();
 
     givenTutorialData(given, createTutorialCtx);
 
@@ -37,5 +38,11 @@ defineFeature(feature, (test) => {
       // check if is uuid
       expect((response as string).length).toBe(36);
     })
+
+    givenTutorialData(given, secondTutorialCreationCtx);
+
+    iSendRequestToCreateATutorial(when, secondTutorialCreationCtx);
+
+    iReceiveAnErrorWithStatusCode(then, secondTutorialCreationCtx);
   });
 })
