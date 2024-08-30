@@ -40,9 +40,9 @@ services:
     env_file:
       - docker.env
 
-  hiringtestsga:
-    image: hiringtestsga
-    container_name: hiringtestsga
+  backend:
+    container_name: backend
+    build: .
     env_file:
       - docker.env
     ports:
