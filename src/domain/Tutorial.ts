@@ -1,13 +1,19 @@
 import { AggregateRoot } from "src/lib/domain/AggregateRoot";
 import { z } from "zod";
 import { ArgumentInvalidException } from "src/lib/exceptions/exceptions";
+import { TutorialUpdatedDomainEvent } from "src/application/event-handlers/domain/TutorialUpdatedDomainEvent";
 
 interface TutorialProps {
+  title: string;
+  creationDate: Date;
+}
+
+interface CreateTutorialProps {
   title: string;
 }
 
 export class Tutorial extends AggregateRoot<TutorialProps> {
-  public static create(props: TutorialProps): Tutorial {
+  public static create(props: CreateTutorialProps): Tutorial {
 
     // props validation - avoid invalid state
 
@@ -22,15 +28,24 @@ export class Tutorial extends AggregateRoot<TutorialProps> {
     return new Tutorial({
       props: {
         title: validation.data.title,
+        creationDate: new Date()
       }
     })
   }
 
-  public update(props: TutorialProps) {
+  public update(props: CreateTutorialProps) {
     // make sure the new props met requirements to build a valid Tutorial
     const newTutorial = Tutorial.create(props);
 
     // update only allowed attributes
     this.props.title = newTutorial.props.title
+
+    // add relevant data  eg: new title
+    this.addEvent(
+      new TutorialUpdatedDomainEvent({
+        aggregateId: this.id,
+        newTitle: props.title,
+      })
+    )
   }
 }

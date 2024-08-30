@@ -1,4 +1,6 @@
 import { Module, Provider } from "@nestjs/common";
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 import { UserController } from "./api/UserController";
 import { SignupUser } from "./application/services/signupUser/SignupUser";
 import { TUTORIAL_REPO, USER_REPO } from "./tokens";
@@ -18,6 +20,7 @@ import { DeleteTutorial } from "./application/services/deleteTutorial/DeleteTuto
 import { TutorialController } from "./api/TutorialController";
 import { KyselyTutorialRepo } from "./infra/repos/KyselyTutorialRepo";
 import { TutorialMapper } from "./domain/mappers/TutorialMapper";
+import { GetTutorials } from "./application/services/getTutorials/GetTutorials";
 
 const httpControllers = [
   UserController,
@@ -48,6 +51,7 @@ const useCases: Provider[] = [
   CreateTutorial,
   UpdateTutorial,
   DeleteTutorial,
+  GetTutorials,
 ];
 
 const repos: Provider[] = [
@@ -96,6 +100,12 @@ const microservices = [
   imports: [
     RequestContextModule,
     EventEmitterModule.forRoot(),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+    }),
   ]
 })
 export class AppModule { }

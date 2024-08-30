@@ -1,11 +1,3 @@
-
-/*  Most of repositories will probably need generic 
-    save/find/delete operations, so it's easier
-    to have some shared interfaces.
-    More specific queries should be defined
-    in a respective repository.
-*/
-
 export class Paginated<T> {
   readonly count: number;
   readonly limit: number;
@@ -20,20 +12,22 @@ export class Paginated<T> {
   }
 }
 
-export type OrderBy = { field: string | true; param: 'asc' | 'desc' };
+export type SQLQueryFilters = { field: string ; value: any };
+export type OrderBy = { field: string ; param: 'asc' | 'desc' };
 
 export type PaginatedQueryParams = {
   limit: number;
   page: number;
   offset: number;
-  orderBy: OrderBy;
+  sqlQueryFilters: SQLQueryFilters[];
+  orderBy: OrderBy[]
 };
 
 export interface BaseRepoPort<Entity> {
   insert(entity: Entity | Entity[]): Promise<void>;
   findAll(): Promise<Entity[]>;
   findOne(id: string): Promise<Entity | undefined>;
-  // findAllPaginated(params: PaginatedQueryParams): Promise<Paginated<Entity>>;
+  findAllPaginated(params: PaginatedQueryParams): Promise<Paginated<Entity>>;
   delete(entity: Entity): Promise<void>;
   transaction<T>(handler: () => Promise<T>): Promise<T>;
 }

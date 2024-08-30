@@ -4,7 +4,7 @@ import { AggregateRoot } from "../domain/AggregateRoot";
 import { LoggerPort } from "../ports/LoggerPort";
 import { Kysely, Transaction, sql } from "kysely";
 import { Database } from "src/boot/db";
-import { BaseRepoPort } from "../ports/BaseRepoPort";
+import { BaseRepoPort, Paginated, PaginatedQueryParams } from "../ports/BaseRepoPort";
 import { AppRequestContextService } from "../application/AppRequestContext";
 
 export interface ObjectLiteral {
@@ -101,10 +101,54 @@ export abstract class KyselyBaseRepo<
       .pool
       .selectFrom(this.tableName as any)
       .selectAll()
-      .where('deleted_at', '=', null)
+      .where('deleted_at', 'is', null)
       .execute()
 
     return rows.map(this.mapper.toDomain)
+  }
+
+  async findAllPaginated(
+    params: PaginatedQueryParams,
+  ): Promise<Paginated<Aggregate>> {
+    let sqlStatement = this
+      .pool
+      .selectFrom(this.tableName as any)
+      .selectAll()
+      .where('deleted_at', 'is', null)
+
+    // Add filters to sql query
+    sqlStatement = params
+      .sqlQueryFilters
+      .reduce(
+        (prevStatement, filterData, _) => {
+          return prevStatement.where(filterData.field, '=', filterData.value)
+        },
+        sqlStatement
+      )
+
+    // Add orderBy to sql query
+    sqlStatement = params
+      .orderBy
+      .reduce(
+        (prevStatement, orderByData, _) => {
+          return prevStatement.orderBy(orderByData.field, orderByData.param)
+        },
+        sqlStatement
+      )
+
+    const rows = await sqlStatement
+      .limit(params.limit)
+      .offset(params.offset)
+      .execute()
+
+    const entities = rows.map(this.mapper.toDomain)
+
+    return new Paginated({
+      data: entities,
+      count: entities.length,
+      limit: params.limit,
+      page: params.page,
+    });
   }
 
   async delete(entity: Aggregate): Promise<void> {

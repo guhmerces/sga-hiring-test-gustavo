@@ -6,6 +6,7 @@ import { SignupUserErrors } from "./SignupUserErrors"
 import { UserPassword } from "src/domain/UserPassword"
 import { User } from "src/domain/User"
 import { UserRepoPort } from "src/domain/ports/UserRepoPort"
+import { ArgumentInvalidException } from "src/lib/exceptions/exceptions"
 
 type Response = Either<
   GenericAppError.UnexpectedError |
@@ -33,30 +34,32 @@ export class SignupUser {
           new SignupUserErrors.AccountAlreadyExists(dto.email)
         )
       }
-    } catch (error) {
-      return left(new GenericAppError.UnexpectedError(error))
-    }
 
-    const hashedPassword = UserPassword.create({
-      value: await UserPassword.hashPassword(dto.password),
-      hashed: true,
-    })
+      const hashedPassword = UserPassword.create({
+        value: await UserPassword.hashPassword(dto.password),
+        hashed: true,
+      })
 
-    const user = User.create({
-      email: dto.email,
-      passwordHash: hashedPassword.getValue(),
-    });
+      const user = User.create({
+        email: dto.email,
+        passwordHash: hashedPassword.getValue(),
+      });
 
-    try {
-      await this.userRepo.transaction( async() => {
+      await this.userRepo.transaction(async () => {
         await this.userRepo.insert(user)
       })
 
       return right(
         Result.ok(user.id)
       );
-    } catch (error) {
-      return left(new GenericAppError.UnexpectedError(error))
+
+    } catch (error: any) {
+      switch (error.constructor) {
+        case ArgumentInvalidException:
+          return left(new SignupUserErrors.AccountAlreadyExists(dto.email))
+        default:
+          return left(new GenericAppError.UnexpectedError(error))
+      }
     }
   }
 }
