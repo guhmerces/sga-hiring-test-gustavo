@@ -38,6 +38,7 @@
     "ioredis": "^5.4.1",
     "jest-cucumber": "^3.0.1",
     "kysely": "^0.27.4",
+    "moment": "^2.30.1",
     "nanoid": "^3.3.4",
     "nestjs-request-context": "^3.0.0",
     "node-jose": "^2.2.0",

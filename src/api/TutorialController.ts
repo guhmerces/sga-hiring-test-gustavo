@@ -1,15 +1,29 @@
-import { CacheInterceptor, CacheKey } from "@nestjs/cache-manager";
-import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Param, Patch, Post, Query, UnprocessableEntityException, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, HttpException, NotFoundException, Param, Patch, Post, Query, Req, UnprocessableEntityException, UseInterceptors } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import moment from "moment";
 import { routesV1 } from "src/app.routes";
-import { createTutorialSchema, updateTutorialSchema } from "src/application/dtos/schemas";
+import { createTutorialSchema, getTutorialsQuerySchema, paginatedQuerySchema, updateTutorialSchema } from "src/application/dtos/schemas";
 import { CreateTutorial, CreateTutorialDto } from "src/application/services/createTutorial/CreateTutorial";
 import { CreateTutorialErrors } from "src/application/services/createTutorial/CreateTutorialErrors";
 import { DeleteTutorial } from "src/application/services/deleteTutorial/DeleteTutorial";
 import { DeleteTutorialErrors } from "src/application/services/deleteTutorial/DeleteTutorialErrors";
+import { FindTutorialsDto, GetTutorials } from "src/application/services/getTutorials/GetTutorials";
 import { UpdateTutorial, UpdateTutorialDto } from "src/application/services/updateTutorial/UpdateTutorial";
+import { TutorialMapper } from "src/domain/mappers/TutorialMapper";
+import { Tutorial } from "src/domain/Tutorial";
 import openapi from "src/infra/http/openapi";
-import { FindTutorialsDto, PaginatedQueryDto } from "src/shared-types";
+import { Paginated } from "src/lib/ports/BaseRepoPort";
+import { z, ZodError } from "zod";
+
+export type FindTutorialsQueryDto = {
+  title?: string;
+  creationDate?: Date;
+}
+
+export type PaginatedQueryDto = {
+  limit?: number;
+  page?: number;
+}
 
 @Controller()
 export class TutorialController {
@@ -17,6 +31,7 @@ export class TutorialController {
     protected createTutorial: CreateTutorial,
     protected updateTutorial: UpdateTutorial,
     protected deleteTutorial: DeleteTutorial,
+    protected getTutorials: GetTutorials,
   ) { }
 
   @ApiOperation(openapi.tutorial.create.schema)
@@ -103,15 +118,39 @@ export class TutorialController {
     }
   }
 
-  @UseInterceptors(CacheInterceptor)
-  @CacheKey('app_tutorials')
-  @ApiOperation(openapi.tutorial.all.schema)
-  @ApiResponse({ status: 200, type: String, description: 'Return all tutorials, paginated' })
   @Get(routesV1.tutorial.all)
+  @ApiOperation(openapi.tutorial.all.schema)
+  @ApiResponse({ status: 422, type: UnprocessableEntityException, description: 'Invalid params' })
+  @ApiResponse({ status: 200, type: String, description: 'Return all tutorials, paginated' })
   public async all(
-    @Body() request: FindTutorialsDto,
-    @Query() queryParams: PaginatedQueryDto,
+    @Query() params: FindTutorialsQueryDto & PaginatedQueryDto,
   ): Promise<any> {
+    try {
+      const validatedParams = getTutorialsQuerySchema.parse(params)
 
+      const result = await this.getTutorials.execute({
+        ...validatedParams,
+        // convert to Js Date type
+        creationDate: validatedParams.creationDate ?
+          moment(validatedParams.creationDate, 'DD/MM/YYYY').toDate()
+          : undefined
+      })
+
+      const paginated = result.value.getValue() as Paginated<Tutorial>;
+
+      return {
+        ...paginated,
+        data: paginated.data.map((new TutorialMapper).toAPI)
+      }
+
+    } catch (error: any) {
+      console.log(error)
+      switch (error.constructor) {
+        case ZodError:
+          throw new UnprocessableEntityException(error.issues)
+        default:
+          throw new HttpException('Something went wrong', 500);
+      }
+    }
   }
 }

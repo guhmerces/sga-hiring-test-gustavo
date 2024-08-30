@@ -1,6 +1,6 @@
 import { generateSchema } from "@anatine/zod-openapi";
-import { SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
-import { createTutorialSchema, createUserRequestSchema, loginRequestSchema } from "src/application/dtos/schemas";
+import { ParameterLocation, SchemaObject } from "@nestjs/swagger/dist/interfaces/open-api-spec.interface";
+import { createTutorialSchema, createUserRequestSchema, getTutorialsQuerySchema, loginRequestSchema } from "src/application/dtos/schemas";
 
 export default {
   user: {
@@ -74,6 +74,17 @@ export default {
         summary: 'Get all tutorials',
         tags: ['tutorial'],
         description: 'Get all tutorials',
+        parameters: [
+          { name: 'limit', in: 'query' as ParameterLocation },
+          { name: 'offset', in: 'query' as ParameterLocation },
+        ],
+        requestBody: {
+          content: {
+            'application/json': {
+              schema: generateSchema(getTutorialsQuerySchema) as SchemaObject
+            }
+          }
+        }
       }
     },
   },

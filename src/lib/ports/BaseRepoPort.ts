@@ -12,13 +12,13 @@ export class Paginated<T> {
   }
 }
 
-export type OrderBy = { field: string ; param: 'asc' | 'desc' };
+export type SQLQueryFilters = { field: string ; value: any };
 
 export type PaginatedQueryParams = {
   limit: number;
   page: number;
   offset: number;
-  orderBy: OrderBy;
+  sqlQueryFilters: SQLQueryFilters[];
 };
 
 export interface BaseRepoPort<Entity> {

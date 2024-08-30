@@ -18,6 +18,7 @@ export type RawUser = {
 export type RawTutorial = {
   id: string;
   title: string;
+  creation_date: Date;
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date;

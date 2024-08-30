@@ -2,18 +2,21 @@ import { Inject } from "@nestjs/common";
 import { TutorialRepoPort } from "src/domain/ports/TutorialRepoPort";
 import { Either, Left, left, Result, right } from "src/lib/logic/Result";
 import { TUTORIAL_REPO } from "src/tokens";
-import { GetTutorialsErrors } from "./GetTutorialsErrors";
 import { GenericAppError } from "src/lib/exceptions/AppError";
 import { Tutorial } from "src/domain/Tutorial";
-import { ArgumentInvalidException } from "src/lib/exceptions/exceptions";
+import { Paginated, SQLQueryFilters } from "src/lib/ports/BaseRepoPort";
+import { PaginatedDto } from "src/shared-types";
+import moment from "moment";
 
-export type GetTutorialsDto = {
-  title: string;
+export type FindTutorialsDto = {
+  title?: string;
+  creationDate?: Date;
 }
 
 type Response = Either<
-GenericAppError.UnexpectedError,
-  Result<string>
+  GenericAppError.UnexpectedError,
+  Result<Paginated<Tutorial>
+  >
 >
 
 export class GetTutorials {
@@ -21,35 +24,35 @@ export class GetTutorials {
     @Inject(TUTORIAL_REPO)
     protected tutorialRepo: TutorialRepoPort,
   ) { }
-  public async execute(dto: GetTutorialsDto): Promise<Response> {
 
-    const { title } = dto;
+  //@ts-ignore
+  public async execute(dto: FindTutorialsDto & PaginatedDto): Promise<Response> {
+    console.log('dto', dto)
 
     try {
-      //Check title uniqueness
-      const exists = await this.tutorialRepo.exists(title)
 
-      if (!!exists) {
-        return left(
-          new GetTutorialsErrors.TitleAlreadyExists(title)
-        )
+      const sqlQueryFilters: SQLQueryFilters[] = []
+
+      if (dto.creationDate) {
+        sqlQueryFilters.push({ field: 'creation_date', value: moment(dto.creationDate).format('YYYY-MM-DD') });
       }
 
-      const tutorial = Tutorial.create({
-        title,
-      });
+      if (dto.title) {
+        sqlQueryFilters.push({ field: 'title', value: dto.title })
+      }
 
-      await this.tutorialRepo.transaction(async () => {
-        await this.tutorialRepo.insert(tutorial)
+      const paginated = await this.tutorialRepo.findAllPaginated({
+        limit: dto.limit,
+        page: dto.page,
+        offset: dto.offset,
+        sqlQueryFilters
       })
 
       return right(
-        Result.ok(tutorial.id)
-      );
+        Result.ok(paginated)
+      )
     } catch (error: any) {
       switch (error.constructor) {
-        case ArgumentInvalidException:
-          return left(new GetTutorialsErrors.InvalidTutorial(error))
         default:
           return left(new GenericAppError.UnexpectedError(error))
       }

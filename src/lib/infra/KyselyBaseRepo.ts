@@ -101,7 +101,7 @@ export abstract class KyselyBaseRepo<
       .pool
       .selectFrom(this.tableName as any)
       .selectAll()
-      .where('deleted_at', '=', null)
+      .where('deleted_at', 'is', null)
       .execute()
 
     return rows.map(this.mapper.toDomain)
@@ -110,15 +110,26 @@ export abstract class KyselyBaseRepo<
   async findAllPaginated(
     params: PaginatedQueryParams,
   ): Promise<Paginated<Aggregate>> {
-
-    const rows = await this
+    let sqlStatement = this
       .pool
       .selectFrom(this.tableName as any)
       .selectAll()
-      .where('deleted_at', '=', null)
+      .where('deleted_at', 'is', null)
+    console.log('params', params)
+
+    // Add filters to sql query
+    sqlStatement = params
+      .sqlQueryFilters
+      .reduce(
+        (prevStatement, filterData, _) => {
+          return prevStatement.where(filterData.field, '=', filterData.value)
+        },
+        sqlStatement
+      )
+
+    const rows = await sqlStatement
       .limit(params.limit)
       .offset(params.offset)
-      .orderBy(params.orderBy.field, params.orderBy.param)
       .execute()
 
     const entities = rows.map(this.mapper.toDomain)
