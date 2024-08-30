@@ -64,6 +64,8 @@ export class TutorialController {
           throw new HttpException('Something went wrong', 500);
       }
     }
+
+    return result.value.getValue();
   }
 
   @ApiOperation(openapi.tutorial.update.schema)
