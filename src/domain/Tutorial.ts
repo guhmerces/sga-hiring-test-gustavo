@@ -1,6 +1,7 @@
 import { AggregateRoot } from "src/lib/domain/AggregateRoot";
 import { z } from "zod";
 import { ArgumentInvalidException } from "src/lib/exceptions/exceptions";
+import { TutorialUpdatedDomainEvent } from "src/application/event-handlers/domain/TutorialUpdatedDomainEvent";
 
 interface TutorialProps {
   title: string;
@@ -38,5 +39,13 @@ export class Tutorial extends AggregateRoot<TutorialProps> {
 
     // update only allowed attributes
     this.props.title = newTutorial.props.title
+
+    // add relevant data  eg: new title
+    this.addEvent(
+      new TutorialUpdatedDomainEvent({
+        aggregateId: this.id,
+        newTitle: props.title,
+      })
+    )
   }
 }
