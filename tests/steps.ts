@@ -90,6 +90,15 @@ export function givenTutorialData<T>(
   })
 }
 
+export function givenAnotherTutorialData<T>(
+  given: DefineStepFunction,
+  ctx: TestContext<CreateTutorialTestContext>,
+) {
+  given(/^given another tutorial data$/, (table: CreateTutorialDto[]) => {
+    ctx.context.createTutorialDto = table[0];
+  })
+}
+
 export function iSendRequestToCreateATutorial(
   when: DefineStepFunction,
   ctx: TestContext<CreateTutorialTestContext>,
@@ -104,10 +113,11 @@ export function iSendRequestToCreateATutorial(
 export function iSendRequestToUpdateATutorial(
   when: DefineStepFunction,
   ctx: TestContext<UpdateTutorialTestContext>,
+  creationCtx: TestContext<CreateTutorialTestContext>,
 ): void {
-  when('I send request to update a Tutorial', async () => {
-    const response = await new ApiClient().updateTutorial(ctx.context.updateTutorialDto)
-    console.log('responsee', response)
+  when('I send request to update a Tutorial', async (table: UpdateTutorialDto[]) => {
+    ctx.context.updateTutorialDto = table[0];
+    const response = await new ApiClient().updateTutorial(ctx.context.updateTutorialDto, creationCtx.latestResponse as string)
     ctx.latestResponse = response;
   });
 }
@@ -117,7 +127,7 @@ export function iSendRequestToDeleteATutorial(
   ctx: TestContext<DeleteTutorialTestContext>,
 ): void {
   when('I send request to delete a Tutorial', async () => {
-    const response = await new ApiClient().deleteTutorial(ctx.context.deleteTutorialDto)
+    const response = await new ApiClient().deleteTutorial(ctx.context.deleteTutorialDto, ctx.latestResponse as string)
     console.log('responsee', response)
     ctx.latestResponse = response;
   });

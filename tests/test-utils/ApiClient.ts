@@ -53,9 +53,9 @@ export class ApiClient {
     return response.body;
   }
 
-  async updateTutorial(dto: UpdateTutorialDto): Promise<string> {
+  async updateTutorial(dto: UpdateTutorialDto, id: string): Promise<string> {
     let reqData: InjectOptions = {
-      url: `${routesV1.tutorial.update}`,
+      url: `${routesV1.tutorial.update.replace(':id', id)}`,
       method: 'PATCH',
       body: dto,
     }
@@ -64,9 +64,9 @@ export class ApiClient {
     return response.body;
   }
 
-  async deleteTutorial(dto: DeleteTutorialDto): Promise<string> {
+  async deleteTutorial(dto: DeleteTutorialDto, id: string): Promise<string> {
     let reqData: InjectOptions = {
-      url: `${routesV1.tutorial.delete}`,
+      url: `${routesV1.tutorial.delete.replace(':id', id)}`,
       method: 'DELETE',
       body: dto,
     }
