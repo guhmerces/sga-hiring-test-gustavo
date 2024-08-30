@@ -7,7 +7,7 @@
   "license": "ISC",
   "scripts": {
     "build": "nest build",
-    "setup": "yarn run migrate",
+    "setup": "yarn run migrate && NODE_ENV=development yarn run migrate && yarn run seed && NODE_ENV=development yarn run seed",
     "start": "node ./bin/src/index.js",
     "seed": "yarn ts-node dev/scripts/seed.ts",
     "migrate": "MIGRATE=UP yarn ts-node dev/scripts/migrator.ts",
