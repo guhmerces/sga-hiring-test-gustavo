@@ -1,3 +1,3 @@
-export class GetTutorialsErros {
+export class GetTutorialsErrors {
   
 }

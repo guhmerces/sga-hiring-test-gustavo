@@ -1,7 +1,7 @@
 import { Result } from "src/lib/logic/Result";
 import { UseCaseError } from "src/lib/exceptions/UseCaseError";
 
-export namespace CreateTutorialErros {
+export namespace CreateTutorialErrors {
   export class TitleAlreadyExists extends Result<UseCaseError> {    
     constructor (title: string) {
       super(false, {

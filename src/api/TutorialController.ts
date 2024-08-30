@@ -4,9 +4,9 @@ import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { routesV1 } from "src/app.routes";
 import { createTutorialSchema, updateTutorialSchema } from "src/application/dtos/schemas";
 import { CreateTutorial, CreateTutorialDto } from "src/application/services/createTutorial/CreateTutorial";
-import { CreateTutorialErros } from "src/application/services/createTutorial/CreateTutorialErros";
+import { CreateTutorialErrors } from "src/application/services/createTutorial/CreateTutorialErrors";
 import { DeleteTutorial } from "src/application/services/deleteTutorial/DeleteTutorial";
-import { DeleteTutorialErros } from "src/application/services/deleteTutorial/DeleteTutorialErros";
+import { DeleteTutorialErrors } from "src/application/services/deleteTutorial/DeleteTutorialErrors";
 import { UpdateTutorial, UpdateTutorialDto } from "src/application/services/updateTutorial/UpdateTutorial";
 import openapi from "src/infra/http/openapi";
 import { FindTutorialsDto, PaginatedQueryDto } from "src/shared-types";
@@ -37,9 +37,9 @@ export class TutorialController {
       const error = result.value;
 
       switch (error.constructor) {
-        case CreateTutorialErros.TitleAlreadyExists:
+        case CreateTutorialErrors.TitleAlreadyExists:
           throw new ForbiddenException(error.errorValue().message)
-        case CreateTutorialErros.InvalidTutorial:
+        case CreateTutorialErrors.InvalidTutorial:
           throw new UnprocessableEntityException(error.errorValue().message)
         default:
           throw new HttpException('Something went wrong', 500);
@@ -71,11 +71,11 @@ export class TutorialController {
       const error = result.value;
 
       switch (error.constructor) {
-        case CreateTutorialErros.TitleAlreadyExists:
+        case CreateTutorialErrors.TitleAlreadyExists:
           throw new ForbiddenException(error.errorValue().message)
-        case DeleteTutorialErros.TutorialNotFound:
+        case DeleteTutorialErrors.TutorialNotFound:
           throw new NotFoundException(error.errorValue().message)
-        case CreateTutorialErros.InvalidTutorial:
+        case CreateTutorialErrors.InvalidTutorial:
           throw new UnprocessableEntityException(error.errorValue().message)
         default:
           throw new HttpException('Something went wrong', 500);
@@ -95,7 +95,7 @@ export class TutorialController {
     if (result.isLeft()) {
       const error = result.value
       switch (error.constructor) {
-        case DeleteTutorialErros.TutorialNotFound:
+        case DeleteTutorialErrors.TutorialNotFound:
           throw new NotFoundException(error.errorValue().message)
         default:
           throw new HttpException('Something went wrong', 500);

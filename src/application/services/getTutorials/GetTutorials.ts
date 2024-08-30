@@ -2,7 +2,7 @@ import { Inject } from "@nestjs/common";
 import { TutorialRepoPort } from "src/domain/ports/TutorialRepoPort";
 import { Either, Left, left, Result, right } from "src/lib/logic/Result";
 import { TUTORIAL_REPO } from "src/tokens";
-import { GetTutorialsErros } from "./GetTutorialsErros";
+import { GetTutorialsErrors } from "./GetTutorialsErrors";
 import { GenericAppError } from "src/lib/exceptions/AppError";
 import { Tutorial } from "src/domain/Tutorial";
 import { ArgumentInvalidException } from "src/lib/exceptions/exceptions";
@@ -31,7 +31,7 @@ export class GetTutorials {
 
       if (!!exists) {
         return left(
-          new GetTutorialsErros.TitleAlreadyExists(title)
+          new GetTutorialsErrors.TitleAlreadyExists(title)
         )
       }
 
@@ -49,7 +49,7 @@ export class GetTutorials {
     } catch (error: any) {
       switch (error.constructor) {
         case ArgumentInvalidException:
-          return left(new GetTutorialsErros.InvalidTutorial(error))
+          return left(new GetTutorialsErrors.InvalidTutorial(error))
         default:
           return left(new GenericAppError.UnexpectedError(error))
       }

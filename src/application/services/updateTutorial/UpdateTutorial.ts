@@ -2,8 +2,8 @@ import { Inject } from "@nestjs/common";
 import { TutorialRepoPort } from "src/domain/ports/TutorialRepoPort";
 import { Either, left, Result, right } from "src/lib/logic/Result";
 import { TUTORIAL_REPO } from "src/tokens";
-import { DeleteTutorialErros } from "../deleteTutorial/DeleteTutorialErros";
-import { CreateTutorialErros } from "../createTutorial/CreateTutorialErros";
+import { DeleteTutorialErrors } from "../deleteTutorial/DeleteTutorialErrors";
+import { CreateTutorialErrors } from "../createTutorial/CreateTutorialErrors";
 import { ArgumentInvalidException } from "src/lib/exceptions/exceptions";
 import { GenericAppError } from "src/lib/exceptions/AppError";
 
@@ -12,9 +12,9 @@ export type UpdateTutorialDto = {
 }
 
 type Response = Either<
-  DeleteTutorialErros.TutorialNotFound |
-  CreateTutorialErros.TitleAlreadyExists |
-  CreateTutorialErros.InvalidTutorial,
+  DeleteTutorialErrors.TutorialNotFound |
+  CreateTutorialErrors.TitleAlreadyExists |
+  CreateTutorialErrors.InvalidTutorial,
   Result<void>
 >
 
@@ -33,7 +33,7 @@ export class UpdateTutorial {
 
       if (!tutorial) {
         return left(
-          new DeleteTutorialErros.TutorialNotFound(id)
+          new DeleteTutorialErrors.TutorialNotFound(id)
         )
       }
 
@@ -45,7 +45,7 @@ export class UpdateTutorial {
         && foundTutorialWithSameTitle.id != tutorial.id
       ) {
         return left(
-          new CreateTutorialErros.TitleAlreadyExists(title)
+          new CreateTutorialErrors.TitleAlreadyExists(title)
         )
       }
 
@@ -63,7 +63,7 @@ export class UpdateTutorial {
     } catch (error: any) {
       switch (error.constructor) {
         case ArgumentInvalidException:
-          return left(new CreateTutorialErros.InvalidTutorial(error))
+          return left(new CreateTutorialErrors.InvalidTutorial(error))
         default:
           return left(new GenericAppError.UnexpectedError(error))
       }
