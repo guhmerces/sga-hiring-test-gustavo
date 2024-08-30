@@ -11,7 +11,8 @@
     "start": "node ./bin/src/index.js",
     "migrate": "MIGRATE=UP yarn ts-node dev/scripts/migrator.ts",
     "migrate-down": "MIGRATE=DOWN yarn ts-node dev/scripts/migrator.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:e2e": "NODE_ENV=development jest -i --config jest-e2e.json --forceExit --detectOpenHandles",
+    "test": "jest --config .jestrc.json"
   },
   "dependencies": {
     "@anatine/zod-openapi": "^2.2.6",

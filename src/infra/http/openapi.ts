@@ -6,9 +6,9 @@ export default {
   user: {
     signup: {
       schema: {
-        summary: 'Create a user',
+        summary: 'Create an user',
         tags: ['user'],
-        description: 'Create a user',
+        description: 'Create an user',
         requestBody: {
           content: {
             'application/json': {

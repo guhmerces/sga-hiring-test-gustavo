@@ -5,7 +5,7 @@ import { USER_REPO } from "src/tokens"
 import { UserRepoPort } from "src/domain/ports/UserRepoPort"
 import { CreateTokenErrors } from "./CreateTokenErrors"
 import jose from 'node-jose'
-import keyset from 'jwk.json'
+import keyset from '../../../../jwk.json'
 import { User } from "src/domain/User"
 
 type Response = Either<
@@ -14,7 +14,7 @@ type Response = Either<
   Result<string>
 >
 
-type LoginDto = {
+export type LoginDto = {
   email: string;
   password: string;
 }
