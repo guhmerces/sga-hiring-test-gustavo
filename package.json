@@ -12,7 +12,7 @@
     "seed": "yarn ts-node dev/scripts/seed.ts",
     "migrate": "MIGRATE=UP yarn ts-node dev/scripts/migrator.ts",
     "migrate-down": "MIGRATE=DOWN yarn ts-node dev/scripts/migrator.ts",
-    "test:e2e": "NODE_ENV=development jest -i --config jest-e2e.json --forceExit --detectOpenHandles",
+    "test:e2e": "yarn cache clean && NODE_ENV=development jest -i --config jest-e2e.json --forceExit --detectOpenHandles",
     "test": "jest --config .jestrc.json"
   },
   "dependencies": {

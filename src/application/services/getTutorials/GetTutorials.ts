@@ -43,7 +43,11 @@ export class GetTutorials {
         limit: dto.limit,
         page: dto.page,
         offset: dto.offset,
-        sqlQueryFilters
+        sqlQueryFilters,
+        orderBy: [{
+          field: 'order',
+          param: 'asc'
+        }]
       })
 
       return right(

@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:20
 WORKDIR /gustavo-merces-teste-sga
 COPY . .
 RUN npm run build

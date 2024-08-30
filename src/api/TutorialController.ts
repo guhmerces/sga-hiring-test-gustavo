@@ -162,7 +162,6 @@ export class TutorialController {
       return resultToBeCached
 
     } catch (error: any) {
-      console.log(error)
       switch (error.constructor) {
         case ZodError:
           throw new UnprocessableEntityException(error.issues)

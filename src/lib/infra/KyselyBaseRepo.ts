@@ -126,6 +126,16 @@ export abstract class KyselyBaseRepo<
         sqlStatement
       )
 
+    // Add orderBy to sql query
+    sqlStatement = params
+      .orderBy
+      .reduce(
+        (prevStatement, orderByData, _) => {
+          return prevStatement.orderBy(orderByData.field, orderByData.param)
+        },
+        sqlStatement
+      )
+
     const rows = await sqlStatement
       .limit(params.limit)
       .offset(params.offset)

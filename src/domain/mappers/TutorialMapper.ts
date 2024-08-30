@@ -32,7 +32,8 @@ export class TutorialMapper implements Mapper<Tutorial, RawTutorial> {
     return {
       id: tutorial.id,
       title: tutorial.getProps().title,
-      creationDate: moment(tutorial.getProps().creationDate).format('DD/MM/YYYY')
+      creationDate: moment(tutorial.getProps().creationDate).format('DD/MM/YYYY'),
+      createdAt: tutorial.createdAt
     }
   }
 }
