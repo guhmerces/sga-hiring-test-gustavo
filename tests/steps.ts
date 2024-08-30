@@ -64,7 +64,6 @@ export function iSendRequestToCreateAnUser(
 ): void {
   when('I send request to create an User', async () => {
     const response = await new ApiClient().signupUser(ctx.context.signupUserRequestDto)
-    console.log('responsee', response)
     ctx.latestResponse = response;
   });
 }
@@ -75,7 +74,6 @@ export function iSendRequestToGetAnAuthToken(
 ): void {
   when('I send request to get an auth token', async () => {
     const response = await new ApiClient().userLogin(ctx.context.userLoginRequestDto)
-    console.log('responsee', response)
     ctx.latestResponse = response;
   });
 }
@@ -105,7 +103,6 @@ export function iSendRequestToCreateATutorial(
 ): void {
   when('I send request to create a Tutorial', async () => {
     const response = await new ApiClient().createTutorial(ctx.context.createTutorialDto)
-    console.log('responsee', response)
     ctx.latestResponse = response;
   });
 }
@@ -128,7 +125,6 @@ export function iSendRequestToDeleteATutorial(
 ): void {
   when('I send request to delete a Tutorial', async () => {
     const response = await new ApiClient().deleteTutorial(ctx.context.deleteTutorialDto, ctx.latestResponse as string)
-    console.log('responsee', response)
     ctx.latestResponse = response;
   });
 }
@@ -139,7 +135,6 @@ export function iSendRequestToGetAllATutorials(
 ): void {
   when('I send request to delete a Tutorial', async () => {
     const response = await new ApiClient().getTutorials(ctx.context.getAllTutorialsDto)
-    console.log('responsee', response)
     ctx.latestResponse = response;
   });
 }
