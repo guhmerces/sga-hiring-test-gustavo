@@ -34,14 +34,19 @@ Depois disso, para avançar como microsserviços de fato, seria necessário cham
 
 Para armazenar os dados, usei Postgres - um banco separado para testes
 
-Para mensageria, usei RabbitMQ. Não foi utilizado no teste (não há necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada, chamada exampleQueue. Fiz isso para simular uma situação real, onde há emissão de eventos de domínio (TutorialUpdatedDomainEvent.ts) onde os Handlers (na camada de Application) poderiam enviar mensagens para a fila examplo criada.
+Para mensageria, usei RabbitMQ. Não foi utilizado no teste (não há necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada, chamada exampleQueue. 
+
+Fiz isso para simular uma situação real, onde há emissão de eventos de domínio (TutorialUpdatedDomainEvent.ts) onde os Handlers (na camada de Application) poderiam enviar mensagens para a fila examplo criada.
 
 ### Design, Desacoplamento e SOLID
 
 Um código escalável acontece via comunicação assíncrona. Por esse motivo optei por orientação a eventos. 
-Para manter a integridade dos modelos de entidade e uma boa separação de serviços, optei por DDD e Arquitetura Limpa (Agregados, Repositórios, Mappers, Portas, Adapters)
-Para acessar os dados usei o query builder Kysely
-O container de injeção de dependência do Nest também foi utilizado 
+
+Para manter a integridade dos modelos de entidade e uma boa separação de serviços, optei por DDD e Arquitetura Limpa (Agregados, Repositórios, Mappers, Portas, Adapters).
+
+Para acessar os dados usei o query builder Kysely.
+
+O container de injeção de dependência do Nest também foi utilizado.
 
 ### Performance
 
@@ -54,7 +59,7 @@ Todos os erros foram tratados com os respectivos códigos HTTP
 
 ### Segurança
 
-Para autorização, tokens JWT gerados a partir de RSA
+Para autorização, tokens JWT gerados a partir de RSA.
 Além disso, algumas configurações básicas para servidores http foram adicionadas: rate limiting, cors, http headers com helmet 
 
 ### Documentação
@@ -75,3 +80,18 @@ Alguns exemplos que deixariam o APP mais robusto:
 * Utilização de CQRS
 
 ## Usando a API
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
