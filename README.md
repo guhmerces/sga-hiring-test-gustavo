@@ -9,7 +9,9 @@ Este projeto vem com um docker-compose.yml e um Dockerfile prontos, para ajudá-
 
 Primeiro siga as instruções para instalar o Docker e o Docker Compose em seu sistema operacional, você pode encontrar a documentação oficial no [Site do Docker](https://docs.docker.com).
 
-Depois de ter o Docker e o Docker Compose instalados e funcionando, você pode iniciar o servidor de desenvolvimento com um único comando:
+Depois de ter o Docker e o Docker Compose instalados e funcionando, <b>entre na raiz do projeto e use os comandos</b>:
+
+    docker build --tag "backend" .
 
     docker-compose up
 
