@@ -60,7 +60,7 @@ export const getTutorialsQuerySchema = z.object({
         message: 'Format should be one of the following : dd/mm/yyyy or dd.mm.yyyy or dd-mm-yyyy',
         path: ['creationDate'],
         params: {
-          price: 'invalid'
+          creationDate: 'invalid'
         }
       })
       return false;
