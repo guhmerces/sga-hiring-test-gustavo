@@ -27,6 +27,8 @@ services:
   db_test_postgres:
     image: postgres:16.1
     environment:
+      - TZ='GMT-3'
+      - PGTZ='GMT-3'
       - POSTGRES_HOST=db_test_postgres
       - POSTGRES_DB=test_sga
       - POSTGRES_USER=test_sgauser
@@ -40,9 +42,9 @@ services:
     env_file:
       - docker.env
 
-  hiringtestsga:
-    image: hiringtestsga
-    container_name: hiringtestsga
+  backend:
+    image: backend
+    container_name: backend
     env_file:
       - docker.env
     ports:
