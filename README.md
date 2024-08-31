@@ -306,6 +306,31 @@ HTTP/1.1 200 OK
 ... alguns response headers aqui:D
 
 ```
+#### Tentando cadastrar tutorial com título ja existente
+```
+POST /tutorial HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 40
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "title": "Meu impressionante tutorial"
+}
+
+
+HTTP/1.1 403 Forbidden
+... alguns response headers aqui :D
+{
+    "error": "Forbidden",
+    "message": "A tutorial with title \"Meu impressionante tutorial\" already exists. Please, try again with another title.",
+    "statusCode": 403
+}
+
+```
 
 #### Tentando interagir com um tutorial deletado 
 
@@ -325,26 +350,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 404 Not Found
-Connection: keep-alive
-Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
-Cross-Origin-Opener-Policy: same-origin
-Cross-Origin-Resource-Policy: same-origin
-Date: Sat, 31 Aug 2024 00:13:15 GMT
-Keep-Alive: timeout=72
-Origin-Agent-Cluster: ?1
-Referrer-Policy: no-referrer
-Strict-Transport-Security: max-age=15552000; includeSubDomains
-X-Content-Type-Options: nosniff
-X-DNS-Prefetch-Control: off
-X-Download-Options: noopen
-X-Frame-Options: SAMEORIGIN
-X-Permitted-Cross-Domain-Policies: none
-X-XSS-Protection: 0
-access-control-allow-credentials: true
-access-control-allow-origin: *
-content-length: 111
-content-type: application/json; charset=utf-8
-
+... alguns response headers aqui :D
 {
     "error": "Not Found",
     "message": "Tutorial with 552fd453-4566-4d1e-ac91-9424a393e3d4 not found",
