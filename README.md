@@ -1,4 +1,4 @@
-# SGA TESTE BACKEND 
+![Screenshot from 2024-08-30 23-31-23](https://github.com/user-attachments/assets/e0a9bcda-2fc9-4c23-8e41-595732b91c49)# SGA TESTE BACKEND 
 
 Sou Gustavo e essa é a implementação do teste técnico da SGA System
 
@@ -60,7 +60,8 @@ Eventos possuem tracing para rastrear as cascatas de acontecimentos desordenados
 Todos os erros foram tratados com os respectivos códigos HTTP
 
 #### <b> Uso de transações e seus logs </b>
-![Screenshot from 2024-08-30 21-47-33](https://github.com/user-attachments/assets/c6da9f1b-2820-4a9f-bd00-b711b5c9b0f5)
+![Screenshot from 2024-08-30 23-31-23](https://github.com/user-attachments/assets/4932b009-1042-42c4-b6bd-25a115fc90cd)
+
 
 
 #### <b>Testes e2e foram incluídos</b>
