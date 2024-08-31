@@ -1,4 +1,4 @@
-![Screenshot from 2024-08-30 23-31-23](https://github.com/user-attachments/assets/e0a9bcda-2fc9-4c23-8e41-595732b91c49)# SGA TESTE BACKEND 
+# SGA TESTE BACKEND 
 
 Sou Gustavo e essa é a implementação do teste técnico da SGA System
 
