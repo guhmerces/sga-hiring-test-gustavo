@@ -27,7 +27,7 @@ Adaptado para este desafio, esse comando irá levantar todos os containers descr
 
 ### Design
 
-O projeto poderia ter sido feita de maneira mais simples e menos burocrática. <b>Abordagens mais simples podem e devem ser usadas quando oportuno</b>. Porém, a situação pensada é a de um projeto profissional equipado para ter continuidade e suportar complexidade (Escalabilidade, Clean Arc, Hexagonal Arc, Abstrações, Estrutura pra eventos)
+O projeto poderia ter sido feito de maneira mais simples e menos burocrática. <b>Abordagens mais simples podem e devem ser usadas quando oportuno</b>. Porém, a situação pensada é a de um projeto profissional equipado para ter continuidade e suportar complexidade (Escalabilidade, Clean Arc, Hexagonal Arc, Abstrações, Estrutura pra eventos)
 
 ### Arquitetura e Escalabilidade
 
