@@ -350,3 +350,83 @@ content-type: application/json; charset=utf-8
 }
 ```
 
+#### Tentando criar um Usuário com um email já cadastrado
+```
+POST /user/signup HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 89
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "email": "foobar@email.com",
+    "password": "12344321",
+    "passwordConfirmation": "12344321"
+}
+
+
+HTTP/1.1 403 Forbidden
+... alguns response headers aqui :D
+
+{
+    "error": "Forbidden",
+    "message": "The email foobar@email.com is already registered.",
+    "statusCode": 403
+}
+```
+
+#### Tentando utilizar uma data incorreta
+```
+HTTP/1.1 422 Unprocessable Entity
+... alguns response headers aqui :D
+
+{
+    "error": "Unprocessable Entity",
+    "message": [
+        {
+            "code": "custom",
+            "message": "Format should be one of the following : dd/mm/yyyy or dd.mm.yyyy or dd-mm-yyyy",
+            "params": {
+                "price": "invalid"
+            },
+            "path": [
+                "creationDate"
+            ]
+        }
+    ],
+    "statusCode": 422
+}
+
+```
+
+#### Utilizando senha e confirmação de senha divergentes
+```
+POST /user/signup HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 89
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "email": "foobar@email.com",
+    "password": "12344321",
+    "passwordConfirmation": "12345678"
+}
+
+
+HTTP/1.1 422 Unprocessable Entity
+... alguns response headers aqui :D
+
+{
+    "error": "Unprocessable Entity",
+    "message": "[\n  {\n    \"code\": \"custom\",\n    \"message\": \"password, passwordConfirmation : Password fields dont match\",\n    \"path\": [\n      \"password\",\n      \"passwordConfirmation\"\n    ]\n  }\n]",
+    "statusCode": 422
+}
+```
+
