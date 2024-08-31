@@ -97,7 +97,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 200 OK
-... alguns muitos headers aqui
+... alguns response headers aqui
 
 {
     "count": 3,
@@ -139,7 +139,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 200 OK
-... alguns muitos headers aqui
+... alguns response headers aqui
 
 {
     "count": 3,
