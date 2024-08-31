@@ -410,7 +410,7 @@ HTTP/1.1 422 Unprocessable Entity
             "code": "custom",
             "message": "Format should be one of the following : dd/mm/yyyy or dd.mm.yyyy or dd-mm-yyyy",
             "params": {
-                "price": "invalid"
+                "creationDate": "invalid"
             },
             "path": [
                 "creationDate"
