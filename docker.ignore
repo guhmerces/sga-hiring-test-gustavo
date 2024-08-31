@@ -3,5 +3,4 @@ bin
 .git
 .env
 docker.env
-rabbitmq.env
 README
