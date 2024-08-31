@@ -85,8 +85,117 @@ Alguns exemplos que deixariam o APP mais robusto:
 
 ### Abaixo, alguns exemplos de requisições seguidas das respostas (utilizado HTTPie)
 
-#### Listar tutorials com paginação
+#### Listar Tutorials - com paginação (data de criação 25/08/2024, page 0, limit 3)
 ```
+GET /tutorial?creationDate=30/08/2024&page=0&limit=3 HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+
+
+HTTP/1.1 200 OK
+... alguns muitos headers aqui
+
+{
+    "count": 3,
+    "data": [
+        {
+            "createdAt": "2024-08-31T00:34:41.269Z",
+            "creationDate": "30/08/2024",
+            "id": "23c8db46-ee01-4d22-bc2e-f3122b4f0e53",
+            "title": "My awesome tutorial of number 0"
+        },
+        {
+            "createdAt": "2024-08-31T00:34:41.269Z",
+            "creationDate": "30/08/2024",
+            "id": "38662a91-568e-4d7b-a3e8-60d768b42f1b",
+            "title": "My awesome tutorial of number 1"
+        },
+        {
+            "createdAt": "2024-08-31T00:34:41.269Z",
+            "creationDate": "30/08/2024",
+            "id": "486eda93-9c08-48e9-8700-1b0e84c0ced1",
+            "title": "My awesome tutorial of number 2"
+        }
+    ],
+    "limit": 3,
+    "page": 0
+}
+```
+
+#### Listar Tutorials - com paginação (data de criação 30/08/2024, page 1, limit 3)
+
+```
+GET /tutorial?creationDate=30/08/2024&page=1&limit=3 HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+
+
+HTTP/1.1 200 OK
+... alguns muitos headers aqui
+
+{
+    "count": 3,
+    "data": [
+        {
+            "createdAt": "2024-08-31T00:34:41.269Z",
+            "creationDate": "30/08/2024",
+            "id": "c0b6d7e2-4d2c-4d6d-a6f4-2e06dfbd9aa6",
+            "title": "My awesome tutorial of number 3"
+        },
+        {
+            "createdAt": "2024-08-31T00:34:41.270Z",
+            "creationDate": "30/08/2024",
+            "id": "bc28456b-569f-48d0-97cc-0df0bdb7445a",
+            "title": "My awesome tutorial of number 4"
+        },
+        {
+            "createdAt": "2024-08-31T00:34:41.270Z",
+            "creationDate": "30/08/2024",
+            "id": "a382af66-cfd9-4b01-a54d-41356c9ee540",
+            "title": "My awesome tutorial of number 5"
+        }
+    ],
+    "limit": 3,
+    "page": 1
+}
+```
+
+#### Listar Tutorials - com paginação (título "My awesome tutorial of number 55", page 0, limit 3)
+
+```
+GET /tutorial?title=My%20awesome%20tutorial%20of%20number%2055&page=0&limit=3 HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+
+
+HTTP/1.1 200 OK
+... alguns response headers aqui
+
+{
+    "count": 1,
+    "data": [
+        {
+            "createdAt": "2024-08-31T00:34:41.272Z",
+            "creationDate": "30/08/2024",
+            "id": "908b187d-8089-41e8-a954-647199c40ec7",
+            "title": "My awesome tutorial of number 55"
+        }
+    ],
+    "limit": 3,
+    "page": 0
+}
 ```
 
 #### Criar usuário:
@@ -108,7 +217,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 201 Created
-... alguns muitos headers aqui :D
+... alguns response headers aqui:D
 
 f9b6b902-9cf7-4791-a34b-08ae43fa14bc
 
@@ -133,7 +242,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 201 Created
-... alguns muitos headers aqui :D
+... alguns response headers aqui:D
 
 eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3NGY1M2YzLWQ0YzQtNDc2Yi05ZTA4LWY2MDQ3NzI0ODgxOSJ9.eyJzdWIiOiJmOWI2YjkwMi05Y2Y3LTQ3OTEtYTM0Yi0wOGFlNDNmYTE0YmMiLCJhdWQiOiJmOWI2YjkwMi05Y2Y3LTQ3OTEtYTM0Yi0wOGFlNDNmYTE0YmMiLCJpYXQiOjE3MjUwNjI3NTIsImV4cCI6MTcyNTA2NjM1Mn0.XOcCmYFVVBBx6EqvprbZD2pDLk3OXnfFLq_RvhuaQC45m7BfwEGURww-griO2uqjZkpmMFXeNkSKNWqcTWq0ZxayWED1FVW2qCa0I_d1fAXqptMcgdDhugv6Mg54l6Lcybk_kruFTf1AHxTel0YFX1gt4iXzXRDihoOJ-N-B1bw
 
@@ -156,7 +265,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 201 Created
-... alguns muitos headers aqui :D
+... alguns response headers aqui:D
 
 552fd453-4566-4d1e-ac91-9424a393e3d4
 
@@ -178,7 +287,7 @@ User-Agent: HTTPie/3.2.2
 
 
 HTTP/1.1 200 OK
-...alguns muitos headers aqui :D
+... alguns response headers aqui:D
 ```
 
 #### Deletar Tutorial
@@ -192,7 +301,7 @@ Host: localhost:8000
 User-Agent: HTTPie/3.2.2
 
 HTTP/1.1 200 OK
-...alguns muitos headers aqui :D
+... alguns response headers aqui:D
 
 ```
 

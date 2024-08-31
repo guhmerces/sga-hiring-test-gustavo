@@ -24,7 +24,7 @@ export function createRandomTutorial(i) {
   return {
     id: v4(),
     title: 'My awesome tutorial of number ' + i,
-    creation_date: i >= 75 ? moment().subtract({ days: 10 }).toDate() : moment().subtract({ days: 5 }).toDate(),
+    creation_date: i >= 75 ? moment('25/08/2024', 'DD/MM/YYYY').toDate() :moment('30/08/2024', 'DD/MM/YYYY').toDate(),
     created_at: new Date(),
     updated_at: new Date()
   };
