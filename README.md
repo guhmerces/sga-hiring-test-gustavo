@@ -459,6 +459,7 @@ function process1(items: any) {
 ### Primeiro trecho
 O primeiro trecho de código é funcional, porém pode ser separado em uma nova função pra dar contexto.
 Não é necessário usar "reduce", mas "reduce" já pressupõe que algo será acumulado e somado, o que pode ajudar quem lê o código
+
 De...
 ```
   var total = 0;
@@ -492,6 +493,7 @@ function process(numbers: number[]) {
 ## Segundo Techo
 O segundo trecho parece não funcionar corretamente para printar os números positivos.
 Poderia-se também usar recursos funcionais para melhorar a leitura e abstração em outra função para remover o que não é foco
+
 De...
 ```
   for(var j = 0; j < items.length; j++) {
