@@ -56,8 +56,13 @@ Eventos possuem tracing para rastrear uma cascata de acontecimentos desordenados
 Todos os erros foram tratados com os respectivos códigos HTTP
 
 #### <b> Uso de transações e seus logs </b>
+![Screenshot from 2024-08-30 21-47-33](https://github.com/user-attachments/assets/c6da9f1b-2820-4a9f-bd00-b711b5c9b0f5)
+
 
 #### <b>Testes e2e foram incluídos</b>
+![Screenshot from 2024-08-30 21-48-45](https://github.com/user-attachments/assets/d2ca1d1b-e15d-4791-8025-f7faee2d2184)
+
+
 
 ### Segurança
 
