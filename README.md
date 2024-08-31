@@ -376,6 +376,14 @@ HTTP/1.1 403 Forbidden
 
 #### Tentando utilizar uma data incorreta
 ```
+GET /tutorial?creationDate=30-13/2024&page=1&limit=3 HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+
 HTTP/1.1 422 Unprocessable Entity
 ... alguns response headers aqui :D
 
