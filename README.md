@@ -33,9 +33,9 @@ O projeto poderia ter sido feita de maneira mais simples e menos burocrática. <
 
 O cenário do teste não tem informações o suficiente para a criação de Contextos delimitados (Bounded Contexts).
 
-Assim, optei por criar somente um Módulo do Nest. Para escalar com microserviços, seria eficiente primeiro passar por <b>monolíticos modulares</b> antes de separar em microserviços (se houver necessidade), e, toda vez que identificado um bounded context novo, seria necessário criar outro Módulo Nest e facilmente mover o registro dos services para esse novo módulo.
+Assim, optei por criar somente um Módulo do Nest. Para escalar com microserviços, seria eficiente primeiro passar por <b>monolíticos modulares</b> antes de separar em microserviços (se houver necessidade), e, toda vez que identificado um bounded context novo, seria necessário criar outro Módulo Nest e facilmente mover os providers para esse novo módulo criado.
 
-Para mensageria, usei RabbitMQ. Não foi utilizado no teste (não há necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada, chamada exampleQueue. Também há exemplo de evento (TutorialUpdatedDomainEvent.ts)
+Para mensageria, usei RabbitMQ. Este, não foi utilizado no teste (não houve necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada - chamada exampleQueue. Também há exemplo de eventos como ex: TutorialUpdatedDomainEvent.ts
 
 ### Design, Desacoplamento e SOLID
 
@@ -53,7 +53,7 @@ Para cache, Redis foi utilizado
 
 ### Obervabilidade e Confiabilidade
 
-Eventos possuem tracing para rastrear uma cascata de acontecimentos desordenados.
+Eventos possuem tracing para rastrear as cascatas de acontecimentos desordenados de uma arquitetura com eventos.
 
 Todos os erros foram tratados com os respectivos códigos HTTP
 
@@ -73,17 +73,19 @@ Além disso : uso de libs para rate limiting, cors, http headers com helmet
 
 ### Documentação
 
-O projeto possui documentação inicial no path /docs ( O teste não solicita incluir autorização em todas as requisições)
+O projeto possui documentação inicial no path /docs 
+
+( O teste não solicita incluir autorização em todas as requisições)
 
 ## Curiosidades e observações importantes
 Levando em conta que o teste seria um projeto profissional, todas as considerações acima podem ser refatoradas para se tornarem mais robustas. Alguns exemplos:
 
-* Documentação do swagger mais rica em detalhes
 * Mais tipos de testes
 * Logs de diferentes níveis em arquivos, armazenamento de eventos em um hub
 * Cache por id
 * Atualização do cache após modificar uma entidade
 * Utilização de CQRS
+* Documentação do swagger mais rica em detalhes
 
 ## Usando a API
 
@@ -91,7 +93,7 @@ Levando em conta que o teste seria um projeto profissional, todas as consideraç
 
 #### Listar Tutorials - com paginação (data de criação 25/08/2024, page 0, limit 3)
 ```
-GET /tutorial?creationDate=30/08/2024&page=0&limit=3 HTTP/1.1
+GET /tutorial?creationDate=25/08/2024&page=0&limit=3 HTTP/1.1
 Accept: */*
 Accept-Encoding: gzip, deflate
 Connection: keep-alive
