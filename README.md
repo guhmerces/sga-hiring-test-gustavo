@@ -4,6 +4,8 @@ Sou Gustavo e essa é a implementação do teste técnico da SGA System
 
 <b>Obs : A segunda parte do teste se encontra no final desse README e também na pasta /questao-complementar</b>
 
+<b>Obs: O jkw.json utilizado em produção precisa ser outro obrigatoriamente</b>
+
 ## Setup
 
 Este projeto vem com um docker-compose.yml e um Dockerfile prontos, para ajudá-lo a configurar um ambiente de desenvolvimento muito rapidamente.
