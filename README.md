@@ -57,7 +57,9 @@ Para cache, Redis foi utilizado
 Eventos possuem tracing para rastrear uma cascata de acontecimentos desordenados, que é algo comum em arquitetura desacopladas.
 Todos os erros foram tratados com os respectivos códigos HTTP
 
-<b>Testes e2e foram incluídos</b>
+#### <b> Uso de transações e seus logs </b>
+
+#### <b>Testes e2e foram incluídos</b>
 
 ### Segurança
 
