@@ -35,7 +35,9 @@ O cenário do teste não tem informações o suficiente para a criação de Cont
 
 Assim, optei por criar somente um Módulo do Nest. Para escalar com microserviços, seria eficiente primeiro passar por <b>monolíticos modulares</b> antes de separar em microserviços (se houver necessidade), e, toda vez que identificado um bounded context novo, seria necessário criar outro Módulo Nest e facilmente mover os providers para esse novo módulo criado.
 
-Para mensageria, usei RabbitMQ. Este, não foi utilizado no teste (não houve necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada - chamada exampleQueue. Também há exemplo de eventos como ex: TutorialUpdatedDomainEvent.ts
+Para mensageria, usei RabbitMQ. Este, não foi utilizado no teste (não houve necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada - chamada exampleQueue. Também há exemplo de eventos como ex: TutorialUpdatedDomainEvent.ts 
+![Screenshot from 2024-08-30 23-28-17](https://github.com/user-attachments/assets/d24cea0b-cf21-48bc-8d07-4648c5cbda29)
+
 
 ### Design, Desacoplamento e SOLID
 
