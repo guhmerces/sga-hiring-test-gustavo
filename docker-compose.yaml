@@ -41,8 +41,8 @@ services:
       - docker.env
 
   backend:
+    image: backend
     container_name: backend
-    build: .
     env_file:
       - docker.env
     ports:

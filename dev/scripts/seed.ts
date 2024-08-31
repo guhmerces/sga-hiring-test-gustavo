@@ -24,13 +24,19 @@ export function createRandomTutorial(i) {
   return {
     id: v4(),
     title: 'My awesome tutorial of number ' + i,
-    creation_date: i >= 75 ? moment().subtract({days: 10}).toDate() : moment().subtract({days: 5}).toDate(),
+    creation_date: i >= 75 ? moment().subtract({ days: 10 }).toDate() : moment().subtract({ days: 5 }).toDate(),
     created_at: new Date(),
     updated_at: new Date()
   };
 }
 
-(async() => {
+(async () => {
+  // if db is not empty, do not seed it
+  console.log('if tutorials table is not empty, seed script will not be called')
+  const count = await db.selectFrom('tutorials').select('id').execute();
+  if (count.length > 0) {
+    return
+  }
   console.log('Seeding database with some tutorials....')
   await db.insertInto('tutorials').values(tutorials).execute()
 })()

@@ -50,12 +50,14 @@ O container de injeção de dependência do Nest também foi utilizado.
 
 ### Performance
 
-Para cache, o redis foi utilizado
+Para cache, Redis foi utilizado
 
 ### Obervabilidade e Confiabilidade
 
 Eventos possuem tracing para rastrear uma cascata de acontecimentos desordenados, que é algo comum em arquitetura desacopladas.
 Todos os erros foram tratados com os respectivos códigos HTTP
+
+<b>Testes e2e foram incluídos</b>
 
 ### Segurança
 
@@ -81,17 +83,161 @@ Alguns exemplos que deixariam o APP mais robusto:
 
 ## Usando a API
 
+### Abaixo, alguns exemplos de requisições seguidas das respostas (utilizado HTTPie)
+
+#### Listar tutorials com paginação
 ```
 ```
 
+#### Criar usuário:
 ```
-```
+POST /user/signup HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 89
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "email": "foobar@email.com",
+    "password": "12344321",
+    "passwordConfirmation": "12344321"
+}
+
+
+HTTP/1.1 201 Created
+... alguns muitos headers aqui :D
+
+f9b6b902-9cf7-4791-a34b-08ae43fa14bc
 
 ```
-```
+
+#### Gerar JWT
 
 ```
-```
+POST /user/login HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 53
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "email": "foobar@email.com",
+    "password": "12344321"
+}
+
+
+HTTP/1.1 201 Created
+... alguns muitos headers aqui :D
+
+eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3NGY1M2YzLWQ0YzQtNDc2Yi05ZTA4LWY2MDQ3NzI0ODgxOSJ9.eyJzdWIiOiJmOWI2YjkwMi05Y2Y3LTQ3OTEtYTM0Yi0wOGFlNDNmYTE0YmMiLCJhdWQiOiJmOWI2YjkwMi05Y2Y3LTQ3OTEtYTM0Yi0wOGFlNDNmYTE0YmMiLCJpYXQiOjE3MjUwNjI3NTIsImV4cCI6MTcyNTA2NjM1Mn0.XOcCmYFVVBBx6EqvprbZD2pDLk3OXnfFLq_RvhuaQC45m7BfwEGURww-griO2uqjZkpmMFXeNkSKNWqcTWq0ZxayWED1FVW2qCa0I_d1fAXqptMcgdDhugv6Mg54l6Lcybk_kruFTf1AHxTel0YFX1gt4iXzXRDihoOJ-N-B1bw
 
 ```
+
+#### Criar Tutorial
 ```
+POST /tutorial HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 40
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "title": "Meu impressionante tutorial"
+}
+
+
+HTTP/1.1 201 Created
+... alguns muitos headers aqui :D
+
+552fd453-4566-4d1e-ac91-9424a393e3d4
+
+```
+#### Atualizar um Tutorial
+```
+PATCH /tutorial/552fd453-4566-4d1e-ac91-9424a393e3d4 HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 28
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "title": "meu novo titulo"
+}
+
+
+HTTP/1.1 200 OK
+...alguns muitos headers aqui :D
+```
+
+#### Deletar Tutorial
+```
+DELETE /tutorial/552fd453-4566-4d1e-ac91-9424a393e3d4 HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 0
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+HTTP/1.1 200 OK
+...alguns muitos headers aqui :D
+
+```
+
+#### Tentando interagir com um tutorial deletado 
+
+```
+PATCH /tutorial/552fd453-4566-4d1e-ac91-9424a393e3d4 HTTP/1.1
+Accept: application/json, */*;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Content-Length: 36
+Content-Type: application/json
+Host: localhost:8000
+User-Agent: HTTPie/3.2.2
+
+{
+    "title": "meu segundo novo titulo"
+}
+
+
+HTTP/1.1 404 Not Found
+Connection: keep-alive
+Content-Security-Policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Date: Sat, 31 Aug 2024 00:13:15 GMT
+Keep-Alive: timeout=72
+Origin-Agent-Cluster: ?1
+Referrer-Policy: no-referrer
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+X-Content-Type-Options: nosniff
+X-DNS-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-XSS-Protection: 0
+access-control-allow-credentials: true
+access-control-allow-origin: *
+content-length: 111
+content-type: application/json; charset=utf-8
+
+{
+    "error": "Not Found",
+    "message": "Tutorial with 552fd453-4566-4d1e-ac91-9424a393e3d4 not found",
+    "statusCode": 404
+}
+```
+
