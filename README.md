@@ -28,15 +28,9 @@ O projeto poderia ter sido feita de maneira mais simples e menos burocrática. P
 
 O cenário do teste não tem informações o suficiente para a criação de Contextos delimitados (Bounded Contexts).
 
-Assim, optei por criar somente um Módulo do Nest. Para escalar com microserviços, seria eficiente primeiro passar por <b>monolíticos modulares</b>, e, toda vez que identificado um bounded context novo, seria necessário criar outro Módulo Nest e facilmente mover o registro dos services para esse novo módulo.
+Assim, optei por criar somente um Módulo do Nest. Para escalar com microserviços, seria eficiente primeiro passar por <b>monolíticos modulares</b> antes de separar em microserviços (se houver necessidade), e, toda vez que identificado um bounded context novo, seria necessário criar outro Módulo Nest e facilmente mover o registro dos services para esse novo módulo.
 
-Depois disso, para avançar como microsserviços de fato, seria necessário chamar a função <b>bootstrap()</b> para cada módulo, criando um novo processo no sistema operacional.
-
-Para armazenar os dados, usei Postgres - um banco separado para testes
-
-Para mensageria, usei RabbitMQ. Não foi utilizado no teste (não há necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada, chamada exampleQueue. 
-
-Fiz isso para simular uma situação real, onde há emissão de eventos de domínio (TutorialUpdatedDomainEvent.ts) onde os Handlers (na camada de Application) poderiam enviar mensagens para a fila examplo criada.
+Para mensageria, usei RabbitMQ. Não foi utilizado no teste (não há necessidade), porém uma conexão TCP é aberta entre o APP e o RabbitMQ com <b>connectMicroservice()</b> e uma fila é registrada, chamada exampleQueue. Também há exemplo de evento (TutorialUpdatedDomainEvent.ts)
 
 ### Design, Desacoplamento e SOLID
 
@@ -54,7 +48,8 @@ Para cache, Redis foi utilizado
 
 ### Obervabilidade e Confiabilidade
 
-Eventos possuem tracing para rastrear uma cascata de acontecimentos desordenados, que é algo comum em arquitetura desacopladas.
+Eventos possuem tracing para rastrear uma cascata de acontecimentos desordenados.
+
 Todos os erros foram tratados com os respectivos códigos HTTP
 
 #### <b> Uso de transações e seus logs </b>
@@ -64,17 +59,14 @@ Todos os erros foram tratados com os respectivos códigos HTTP
 ### Segurança
 
 Para autorização, tokens JWT gerados a partir de RSA.
-Além disso, algumas configurações básicas para servidores http foram adicionadas: rate limiting, cors, http headers com helmet 
+Além disso : uso de libs para rate limiting, cors, http headers com helmet 
 
 ### Documentação
 
-O projeto possui documentação inicial no path /docs
-O teste não solicita incluir autorização em todas as requisições
+O projeto possui documentação inicial no path /docs ( O teste não solicita incluir autorização em todas as requisições)
 
 ## Curiosidades e observações importantes
-Levando em conta que o teste seria um projeto profissional, todas as considerações acima podem ser refatoradas para se tornarem mais robustas.
-Porém, essa robustez costuma ser implementada com o tempo e foge bastante do escopo desse teste. 
-Alguns exemplos que deixariam o APP mais robusto:
+Levando em conta que o teste seria um projeto profissional, todas as considerações acima podem ser refatoradas para se tornarem mais robustas. Alguns exemplos:
 
 * Documentação do swagger mais rica em detalhes
 * Mais tipos de testes
