@@ -1,6 +1,6 @@
 # SGA TESTE BACKEND 
 
-#### EDIT : APESAR DA TAREFA SER BEM CONSTRUÍDA, A COMPAINHA QUE SOLICITOU O TESTE, INFELIZMENTE, OPTOU POR NÃO DAR NENHUM RETORNO, PORÉM OPTEI POR DEIXAR O TESTE AQUI, COMO EXEMPLO DO MEU TRABALHO
+#### EDIT : A tarefa foi bem construída, mas a compainha que solicitou o teste optou por não dar nenhum feedback
 
 Sou Gustavo e essa é a implementação do teste técnico da SGA System
 
