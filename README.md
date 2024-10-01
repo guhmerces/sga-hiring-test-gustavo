@@ -1,6 +1,6 @@
 # SGA TESTE BACKEND 
 
-#### EDIT : A compainha que solicitou o teste optou por não dar nenhum retorno. O teste provavelmente não foi visualizado.Porém, fica como exemplo do meu trabalho.
+#### EDIT : Não houve retorno. O teste provavelmente não foi visualizado. Porém, fica como exemplo do meu trabalho.
 
 Sou Gustavo e essa é a implementação do teste técnico da SGA System
 
