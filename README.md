@@ -510,7 +510,7 @@ function process(numbers: number[]) {
 }
 ```
 
-## Segundo Techo
+## Segundo Trecho
 O segundo trecho parece não funcionar corretamente para printar os números positivos.
 Poderia-se também usar recursos funcionais para melhorar a leitura e abstração em outra função para remover o que não é foco
 
